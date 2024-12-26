@@ -1,0 +1,11 @@
+<section class="listing">
+    <img
+        class="listing-photo"
+        src="DASH_logo.png"
+        alt="Exterior photo of {{ formulario.nome }}"
+        crossorigin
+    />
+    <h2 class="listing-heading">{{ formulario.nome }}</h2>
+    <p class="listing-location">{{ formulario.nome }}, {{ formulario.nome }}</p>
+    <a [routerLink]="['/formulario', formulario.id]">Learn More</a>
+</section>

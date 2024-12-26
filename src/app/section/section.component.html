@@ -2,7 +2,7 @@
 
     <!-- Cabeçalho da Seção/Subseção -->
     <!-- Modo de visualização/respondendo -->
-    <div *ngIf="estadoProntuario === 'visualizacao' || estadoProntuario === 'respondendo'" class="section-header-hover" (click)="toggleSection()">
+    <div *ngIf="estadoFormulario === 'visualizacao' || estadoFormulario === 'respondendo'" class="section-header-hover" (click)="toggleSection()">
       <h2 class="section-title">{{ sectionIndex }}. {{ section.titulo }}</h2>
       <img
         class="toggle-button"
@@ -13,7 +13,7 @@
     </div>
 
     <!-- Modo de edição -->
-    <div *ngIf="estadoProntuario === 'editando'" class="section-header-edit">
+    <div *ngIf="estadoFormulario === 'editando'" class="section-header-edit">
       <!-- <h2 class="section-title">{{ sectionIndex }}. {{ section.titulo }}</h2> -->
       <div *ngIf="secaoEditando; else displayMode">
         <input type="text" [(ngModel)]="secaoEditandoTitulo" />
@@ -41,7 +41,7 @@
           <app-quesito 
             [quesito]="castToQuesitoComplete(subItem)" 
             [quesitoIndex]="sectionIndex + '.' + (i + 1)" 
-            [estadoProntuario]="estadoProntuario"
+            [estadoFormulario]="estadoFormulario"
             (subQuesitoCriado)="adicionarSubQuesitoPropagate()"
             (quesitoAtualizado)="quesitoAtualizadoPropagate()"
             (respostaAtualizada)="respostaAtualizadaPropagate()"
@@ -54,7 +54,7 @@
           <app-section
             [section]="castToSecaoComplete(subItem)"
             [sectionIndex]="sectionIndex + '.' + (i + 1)"
-            [estadoProntuario]="estadoProntuario"
+            [estadoFormulario]="estadoFormulario"
             (secaoAtualizada)="atualizarSecaoPropagate($event)"
             (subSecaoCriada)="adicionarSubSecaoPropagate($event)"
             (quesitoCriado)="adicionarQuesitoPropagate()"

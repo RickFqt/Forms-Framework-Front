@@ -2,12 +2,12 @@ import { CommonModule } from '@angular/common';
 import { Component, EventEmitter, inject, Output, QueryList, ViewChildren } from '@angular/core';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { SectionComponent } from '../section/section.component';
-import { ProntuarioService } from '../prontuario.service';
+import { FormularioService } from '../formulario.service';
 import { SecaoService } from '../secao.service';
 import { QuesitoService } from '../quesito.service';
 import { OpcaoService } from '../opcao.service';
 import { RespostaService } from '../resposta.service';
-import { Prontuario, ProntuarioComplete, ProntuarioData } from '../prontuario';
+import { Formulario, FormularioComplete, FormularioData } from '../formulario';
 import { SecaoComplete, SecaoCreate, SecaoData } from '../secao';
 import { QuesitoComplete, QuesitoData } from '../quesito';
 import { Opcao, OpcaoComplete } from '../opcao';
@@ -22,18 +22,18 @@ import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
 
 @Component({
-  selector: 'app-prontuario-view',
+  selector: 'app-formulario-view',
   standalone: true,
   imports: [RouterModule, CommonModule, SectionComponent, FormsModule],
-  templateUrl: './prontuario-view.component.html',
-  styleUrl: './prontuario-view.component.css'
+  templateUrl: './formulario-view.component.html',
+  styleUrl: './formulario-view.component.css'
 })
-export class ProntuarioViewComponent {
+export class FormularioViewComponent {
   route : ActivatedRoute = inject(ActivatedRoute);
   buttonSrc: string = 'button.png';
-  estadoProntuario: string = 'visualizacao';
+  estadoFormulario: string = 'visualizacao';
   usuarioService: UsuarioService = inject(UsuarioService);
-  prontuarioService: ProntuarioService = inject(ProntuarioService);
+  formularioService: FormularioService = inject(FormularioService);
   secaoService: SecaoService = inject(SecaoService);
   quesitoService: QuesitoService = inject(QuesitoService);
   opcaoService: OpcaoService = inject(OpcaoService);
@@ -41,7 +41,7 @@ export class ProntuarioViewComponent {
   router: Router = inject(Router);
 
 
-  prontuario : ProntuarioComplete = {} as ProntuarioComplete;
+  formulario : FormularioComplete = {} as FormularioComplete;
   displayedText: string = '';
   displayedDiagnosticoText: string = '';
 
@@ -50,20 +50,20 @@ export class ProntuarioViewComponent {
   ehMensagemErro = false;
 
   ngOnInit() {
-    this.changeProntuarioState('visualizacao');
-    this.refreshProntuarioAsync().subscribe(() => {
-      this.displayedText = this.prontuario.diagnosticoLLM || "";
+    this.changeFormularioState('visualizacao');
+    this.refreshFormularioAsync().subscribe(() => {
+      this.displayedText = this.formulario.diagnosticoLLM || "";
     });
   }
 
-  refreshProntuario(id: number = 0) {
-    const prontuarioId = (id != 0 ? id : parseInt(this.route.snapshot.params['id'], 10));
+  refreshFormulario(id: number = 0) {
+    const formularioId = (id != 0 ? id : parseInt(this.route.snapshot.params['id'], 10));
 
-    const incluirDesabilitados : boolean = this.estadoProntuario === 'editando' ? true : false;
+    const incluirDesabilitados : boolean = this.estadoFormulario === 'editando' ? true : false;
 
-    this.prontuarioService.getByIdComplete(prontuarioId, incluirDesabilitados).subscribe(
-      (prontuarioData) => {
-        this.prontuario = prontuarioData;
+    this.formularioService.getByIdComplete(formularioId, incluirDesabilitados).subscribe(
+      (formularioData) => {
+        this.formulario = formularioData;
       }
     );
   }
@@ -76,18 +76,18 @@ export class ProntuarioViewComponent {
     this.buttonSrc = 'button.png';
   }
 
-  changeProntuarioState(estado: string) {
+  changeFormularioState(estado: string) {
     // Possiveis estados: visualizacao, respondendo, editando
-    this.estadoProntuario = estado;
-    // this.refreshProntuarioAsync().subscribe(() => {});
+    this.estadoFormulario = estado;
+    // this.refreshFormularioAsync().subscribe(() => {});
   }
   
   // DEBUG ONLY FUNCTION; REMOVE LATER
-  changeProntuarioStateDebug() {
-    this.estadoProntuario = this.estadoProntuario === 'visualizacao' ? 'respondendo' : 'visualizacao';
+  changeFormularioStateDebug() {
+    this.estadoFormulario = this.estadoFormulario === 'visualizacao' ? 'respondendo' : 'visualizacao';
   }
 
-  async makeProntuarioCopy(): Promise<void> {
+  async makeFormularioCopy(): Promise<void> {
     // const newUsuario : UsuarioCreate = {
     //   nome: 'Usuario Fantasma',
     //   login: 'login',
@@ -100,12 +100,12 @@ export class ProntuarioViewComponent {
     // TODO: Get the id of the user that is logged in
     const idUsuarioCriado = 1;
 
-    const prontuarioCopiado = await firstValueFrom(this.prontuarioService.duplicar(this.prontuario.id, idUsuarioCriado));
-    this.router.navigate(['/prontuario', prontuarioCopiado.id]);
-    this.refreshProntuario(prontuarioCopiado.id);
-    // this.prontuario = await this.mapProntuarioById(prontuarioCopiado.id);
-    console.log('Prontuario copiado!');
-    console.log(prontuarioCopiado);
+    const formularioCopiado = await firstValueFrom(this.formularioService.duplicar(this.formulario.id, idUsuarioCriado));
+    this.router.navigate(['/formulario', formularioCopiado.id]);
+    this.refreshFormulario(formularioCopiado.id);
+    // this.formulario = await this.mapFormularioById(formularioCopiado.id);
+    console.log('Formulario copiado!');
+    console.log(formularioCopiado);
     this.mensagemSucesso = 'Prontuário copiado com sucesso!';
     this.mostrarPopUp = true;
 
@@ -120,15 +120,15 @@ export class ProntuarioViewComponent {
     this.ehMensagemErro = false;
   }
 
-  async makeProntuarioFromTemplate(): Promise<void> {
-    const prontuarioId = parseInt(this.route.snapshot.params['id'], 10);
+  async makeFormularioFromTemplate(): Promise<void> {
+    const formularioId = parseInt(this.route.snapshot.params['id'], 10);
 
-    const prontuarioCriado = await firstValueFrom(this.prontuarioService.addFromTemplate(prontuarioId));
-    // this.prontuario = await this.mapProntuarioById(prontuarioCriado.id);
-    this.router.navigate(['/prontuario', prontuarioCriado.id]);
-    this.refreshProntuario(prontuarioCriado.id);
-    console.log('Prontuario criado a partir de template!');
-    console.log(prontuarioCriado);
+    const formularioCriado = await firstValueFrom(this.formularioService.addFromTemplate(formularioId));
+    // this.formulario = await this.mapFormularioById(formularioCriado.id);
+    this.router.navigate(['/formulario', formularioCriado.id]);
+    this.refreshFormulario(formularioCriado.id);
+    console.log('Formulario criado a partir de template!');
+    console.log(formularioCriado);
     this.mensagemSucesso = 'Prontuário criado a partir de template!';
     this.mostrarPopUp = true;
 
@@ -141,10 +141,10 @@ export class ProntuarioViewComponent {
   gerarDiagnosticoLLM() {
     const textarea = document.getElementById("diagnosticoLLM") as HTMLTextAreaElement;
     textarea.value = "Gerando diagnóstico..."; 
-    this.prontuarioService.gerarDiagnosticoLLM(this.prontuario.id).subscribe(() => {
+    this.formularioService.gerarDiagnosticoLLM(this.formulario.id).subscribe(() => {
       // Aguarda o refresh do prontuário antes de iniciar a animação
-      this.refreshProntuarioAsync().subscribe(() => {
-        const text = this.prontuario.diagnosticoLLM;
+      this.refreshFormularioAsync().subscribe(() => {
+        const text = this.formulario.diagnosticoLLM;
         
         let index = 0;
         const textarea = document.getElementById("diagnosticoLLM") as HTMLTextAreaElement;
@@ -166,7 +166,7 @@ export class ProntuarioViewComponent {
   }
 
   gerarDiagnosticoPreCadastrado() {
-    this.prontuarioService.gerarDiagnostico(this.prontuario.id).subscribe((diagnostico) => {
+    this.formularioService.gerarDiagnostico(this.formulario.id).subscribe((diagnostico) => {
       const textarea = document.getElementById("diagnosticoPreCadastrado") as HTMLTextAreaElement;
       textarea.value = diagnostico.descricao;
       this.displayedDiagnosticoText = diagnostico.descricao;
@@ -175,14 +175,14 @@ export class ProntuarioViewComponent {
     
     
 
-  refreshProntuarioAsync(id: number = 0): Observable<void> {
-    const prontuarioId = (id !== 0 ? id : parseInt(this.route.snapshot.params['id'], 10));
-    const incluirDesabilitados: boolean = this.estadoProntuario === 'editando';
+  refreshFormularioAsync(id: number = 0): Observable<void> {
+    const formularioId = (id !== 0 ? id : parseInt(this.route.snapshot.params['id'], 10));
+    const incluirDesabilitados: boolean = this.estadoFormulario === 'editando';
 
     return new Observable<void>((observer) => {
-      this.prontuarioService.getByIdComplete(prontuarioId, incluirDesabilitados).subscribe(
-        (prontuarioData) => {
-          this.prontuario = prontuarioData;
+      this.formularioService.getByIdComplete(formularioId, incluirDesabilitados).subscribe(
+        (formularioData) => {
+          this.formulario = formularioData;
           observer.next();
           observer.complete();
         }
@@ -191,18 +191,18 @@ export class ProntuarioViewComponent {
   }
 
   generatePDF() {
-    this.prontuarioService.getByIdComplete(this.prontuario.id, false).subscribe({
-      next: (prontuario) => {
-        console.log(prontuario)
+    this.formularioService.getByIdComplete(this.formulario.id, false).subscribe({
+      next: (formulario) => {
+        console.log(formulario)
         // Cria uma nova instância de jsPDF
         const doc = new jsPDF('p', 'mm', 'a4');
   
         // Título
         doc.setFontSize(20);
         doc.setFont('Nunito', 'bold');
-        doc.text(prontuario.nome, 10, 20);
+        doc.text(formulario.nome, 10, 20);
         // Imprime se é template
-        if (prontuario.ehTemplate) {
+        if (formulario.ehTemplate) {
           doc.setFontSize(12);
           doc.text('@Template', 60, 20);
         }
@@ -210,7 +210,7 @@ export class ProntuarioViewComponent {
         // Descrição
         doc.setFontSize(14);
         doc.setFont('Nunito', 'normal');
-        doc.text(prontuario.descricao || 'Sem descrição', 10, 30);
+        doc.text(formulario.descricao || 'Sem descrição', 10, 30);
   
         // Seções/Quesitos
         let yPosition = 40;
@@ -303,7 +303,7 @@ export class ProntuarioViewComponent {
             item.subQuesitos.forEach((subItem: any) => printSubItem(subItem, depth + 1));
           }
         };
-        prontuario.secoes.forEach((secao, index) => {
+        formulario.secoes.forEach((secao, index) => {
           printSubItem(secao);
 
           // Separador
@@ -321,7 +321,7 @@ export class ProntuarioViewComponent {
         });
   
         // Salva o PDF com o nome do prontuário
-        doc.save(`${prontuario.nome}.pdf`);
+        doc.save(`${formulario.nome}.pdf`);
       },
       error: (error) => {
         console.error('Erro ao buscar o prontuário:', error);
@@ -344,11 +344,11 @@ export class ProntuarioViewComponent {
       };
 
       // Adiciona a nova seção ao prontuário
-      const novaSecaoCriada = await firstValueFrom(this.prontuarioService.addSecao(this.prontuario.id, novaSecao));
-      this.refreshProntuario();
+      const novaSecaoCriada = await firstValueFrom(this.formularioService.addSecao(this.formulario.id, novaSecao));
+      this.refreshFormulario();
       // Atualiza o prontuário local
-      // this.prontuario.secoesIds.push(novaSecaoCriada.id);
-      // this.prontuario.secoes.push(await this.mapSecaoById(novaSecaoCriada.id));
+      // this.formulario.secoesIds.push(novaSecaoCriada.id);
+      // this.formulario.secoes.push(await this.mapSecaoById(novaSecaoCriada.id));
       this.novaSecaoTitulo = ''; // limpa o campo após a adição
     } else {
       alert('Por favor, insira um título para a seção.');
@@ -356,22 +356,22 @@ export class ProntuarioViewComponent {
   }
 
   adicionarSubSecao(event : {superSecaoId : number, subSecao : SecaoData}) {
-    this.refreshProntuario();
+    this.refreshFormulario();
   }
 
   atualizarSecao(event : {superSecaoId: number, secaoAtualizada: SecaoData}) {
-    this.refreshProntuario();
+    this.refreshFormulario();
   }
 
   finalizarEdicao() {
 
-    this.prontuarioService.finalizarProntuario(this.prontuario.id).subscribe({
+    this.formularioService.finalizarFormulario(this.formulario.id).subscribe({
       next: () => {
-      this.refreshProntuario();
+      this.refreshFormulario();
       console.log('Prontuário finalizado!');
       this.mensagemSucesso = 'Prontuário finalizado com sucesso!';
       this.mostrarPopUp = true;
-      this.changeProntuarioState('visualizacao');
+      this.changeFormularioState('visualizacao');
       
 
       },
@@ -392,29 +392,29 @@ export class ProntuarioViewComponent {
 
   salvarRespostasDissertativas() {
 
-    const prontuarioId = this.prontuario.id;
+    const formularioId = this.formulario.id;
     
-    const salvarRequisicoes = this.secaoComponents.map(secaoComponent => secaoComponent.salvarRespostasDissertativas(prontuarioId));
+    const salvarRequisicoes = this.secaoComponents.map(secaoComponent => secaoComponent.salvarRespostasDissertativas(formularioId));
 
     Promise.all(salvarRequisicoes).then(() => {
-      // this.refreshProntuario();
+      // this.refreshFormulario();
       console.log('Respostas salvas!');
       this.mensagemSucesso = 'Respostas salvas com sucesso!';
       this.mostrarPopUp = true;
 
-      this.changeProntuarioState('visualizacao');
+      this.changeFormularioState('visualizacao');
 
     });
   }
 
   salvarResposta(event : {quesitoId:number, resposta:RespostaCreate, opcaoId:number}) {
     
-    this.prontuarioService.addResposta(this.prontuario.id, event.quesitoId, event.resposta).subscribe(
+    this.formularioService.addResposta(this.formulario.id, event.quesitoId, event.resposta).subscribe(
       (resposta) => {
         
         this.respostaService.addOpcaoMarcada(resposta.id, event.opcaoId).subscribe(
           (resposta) => {
-            this.refreshProntuario();
+            this.refreshFormulario();
             console.log('Resposta salva!');
           }
         );

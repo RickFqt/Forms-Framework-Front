@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { ProntuarioViewComponent } from './prontuario-view.component';
+import { FormularioViewComponent } from './formulario-view.component';
 
-describe('ProntuarioViewComponent', () => {
-  let component: ProntuarioViewComponent;
-  let fixture: ComponentFixture<ProntuarioViewComponent>;
+describe('FormularioViewComponent', () => {
+  let component: FormularioViewComponent;
+  let fixture: ComponentFixture<FormularioViewComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [ProntuarioViewComponent]
+      imports: [FormularioViewComponent]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(ProntuarioViewComponent);
+    fixture = TestBed.createComponent(FormularioViewComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

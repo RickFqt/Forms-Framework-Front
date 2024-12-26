@@ -1,13 +1,13 @@
 import { TestBed } from '@angular/core/testing';
 
-import { ProntuarioService } from './prontuario.service';
+import { FormularioService } from './formulario.service';
 
-describe('ProntuarioService', () => {
-  let service: ProntuarioService;
+describe('FormularioService', () => {
+  let service: FormularioService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({});
-    service = TestBed.inject(ProntuarioService);
+    service = TestBed.inject(FormularioService);
   });
 
   it('should be created', () => {

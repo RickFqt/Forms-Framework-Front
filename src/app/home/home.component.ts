@@ -1,38 +1,38 @@
 import { Component, inject } from '@angular/core';
-import { ProntuarioItemComponent } from '../prontuario-item/prontuario-item.component';
-import { Prontuario } from '../prontuario';
-import { ProntuarioService } from '../prontuario.service';
+import { FormularioItemComponent } from '../formulario-item/formulario-item.component';
+import { Formulario } from '../formulario';
+import { FormularioService } from '../formulario.service';
 import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [ProntuarioItemComponent, CommonModule],
+  imports: [FormularioItemComponent, CommonModule],
   templateUrl: './home.component.html',
   styleUrl: './home.component.css'
 })
 export class HomeComponent {
-  prontuarioService: ProntuarioService = inject(ProntuarioService);
+  formularioService: FormularioService = inject(FormularioService);
 
-  prontuarioList: Prontuario[] = [];
-  filteredProntuarioList: Prontuario[] = [];
+  formularioList: Formulario[] = [];
+  filteredFormularioList: Formulario[] = [];
 
   constructor() {
 
-    this.prontuarioService.getAll().subscribe((prontuarioList: Prontuario[]) => {
-      this.prontuarioList = prontuarioList;
-      this.filteredProntuarioList = prontuarioList;
+    this.formularioService.getAll().subscribe((formularioList: Formulario[]) => {
+      this.formularioList = formularioList;
+      this.filteredFormularioList = formularioList;
     });
   }
 
   filterResults(text: string) {
     if(!text) {
-      this.filteredProntuarioList = this.prontuarioList;
+      this.filteredFormularioList = this.formularioList;
       return;
     }
 
-    this.filteredProntuarioList = this.prontuarioList.filter((prontuario) => 
-      prontuario?.nome.toLowerCase().includes(text.toLowerCase())
+    this.filteredFormularioList = this.formularioList.filter((formulario) => 
+      formulario?.nome.toLowerCase().includes(text.toLowerCase())
     );
   }
 }

@@ -7,7 +7,7 @@ export interface Secao {
     nivel: number;
     subSecoesIds: number[];
     superSecaoId: number;
-    prontuarioId: number;
+    formularioId: number;
     quesitosIds: number[];
 }
 
@@ -18,7 +18,7 @@ export class SecaoData implements Secao {
     nivel: number;
     subSecoesIds: number[];
     superSecaoId: number;
-    prontuarioId: number;
+    formularioId: number;
     quesitosIds: number[];
 
     quesitos: any[];
@@ -31,7 +31,7 @@ export class SecaoData implements Secao {
         nivel: number = 0,
         subSecoesIds: number[] = [],
         superSecaoId: number = 0,
-        prontuarioId: number = 0,
+        formularioId: number = 0,
         quesitosIds: number[] = [],
         quesitos: any[] = [],
         subSecoes: any[] = []
@@ -42,7 +42,7 @@ export class SecaoData implements Secao {
         this.nivel = nivel;
         this.subSecoesIds = subSecoesIds;
         this.superSecaoId = superSecaoId;
-        this.prontuarioId = prontuarioId;
+        this.formularioId = formularioId;
         this.quesitosIds = quesitosIds;
         this.quesitos = quesitos;
         this.subSecoes = subSecoes;
@@ -78,7 +78,7 @@ export class SecaoComplete implements ItemOutput {
     nivel: number;
     subItens: ItemOutput[]
     superSecaoId: number;
-    prontuarioId: number;
+    formularioId: number;
 
     constructor(
         id: number = 0,
@@ -89,7 +89,7 @@ export class SecaoComplete implements ItemOutput {
         nivel: number = 0,
         subItens: (ItemOutput)[] = [],
         superSecaoId: number = 0,
-        prontuarioId: number = 0
+        formularioId: number = 0
     ) {
         this.id = id;
         this.tipoDeItem = tipoDeItem;
@@ -99,6 +99,6 @@ export class SecaoComplete implements ItemOutput {
         this.nivel = nivel;
         this.subItens = subItens;
         this.superSecaoId = superSecaoId;
-        this.prontuarioId = prontuarioId;
+        this.formularioId = formularioId;
     }
 }

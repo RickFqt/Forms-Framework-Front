@@ -23,18 +23,18 @@
     </div>
 
     <div class="header">
-      <h1 class="title">{{ prontuario.nome }} <span *ngIf="prontuario.ehTemplate">&#64;Template</span></h1>
+      <h1 class="title">{{ formulario.nome }} <span *ngIf="formulario.ehTemplate">&#64;Template</span></h1>
       <span>
-        <img *ngIf="prontuario.ehTemplate" src="plus_sign.svg" alt="Criar prontuario a partir de template" class="top-right-buttons plus-button"
-        (click)="makeProntuarioFromTemplate()">
+        <img *ngIf="formulario.ehTemplate" src="plus_sign.svg" alt="Criar formulario a partir de template" class="top-right-buttons plus-button"
+        (click)="makeFormularioFromTemplate()">
         <img src="edit_icon.svg" alt="Editar prontuário" class="top-right-buttons edit-button"
-        (click)="changeProntuarioState('editando')">
-        <img *ngIf="!prontuario.ehTemplate" src="responder_icon.svg" alt="Responder prontuario" class="top-right-buttons answer-button"
-        (click)="changeProntuarioState('respondendo')">
-        <img src="eye_icon.svg" alt="Visualizar prontuario" class="top-right-buttons plus-button"
-        (click)="changeProntuarioState('visualizacao')">
-        <img src="copy_icon.svg" alt="Duplicar prontuario" class="top-right-buttons copy-button"
-        (click)="makeProntuarioCopy()">
+        (click)="changeFormularioState('editando')">
+        <img *ngIf="!formulario.ehTemplate" src="responder_icon.svg" alt="Responder formulario" class="top-right-buttons answer-button"
+        (click)="changeFormularioState('respondendo')">
+        <img src="eye_icon.svg" alt="Visualizar formulario" class="top-right-buttons plus-button"
+        (click)="changeFormularioState('visualizacao')">
+        <img src="copy_icon.svg" alt="Duplicar formulario" class="top-right-buttons copy-button"
+        (click)="makeFormularioCopy()">
         <img src="pdf_icon.svg" alt="Exportar para PDF" class="top-right-buttons pdf-button"
         (click)="generatePDF()">
         <!-- <button (click)="generatePDF()">Exportar para PDF</button> -->
@@ -46,28 +46,28 @@
     <!-- Título -->
     
     <!-- Descrição -->
-    <p class="description">{{ prontuario.descricao }}</p>
+    <p class="description">{{ formulario.descricao }}</p>
 
     <hr class="section-separator">
     
     <!-- Seções -->
-    <div class="sections" *ngFor="let section of prontuario.secoes; let i = index">
+    <div class="sections" *ngFor="let section of formulario.secoes; let i = index">
       <app-section 
         [section]="section" 
         [sectionIndex]="(i + 1).toString()" 
-        [estadoProntuario]="estadoProntuario"
-        (secaoAtualizada)="refreshProntuario()"
-        (subSecaoCriada)="refreshProntuario()"
-        (quesitoCriado)="refreshProntuario()"
-        (subQuesitoCriado)="refreshProntuario()"
-        (quesitoAtualizado)="refreshProntuario()"
-        (respostaAtualizada)="refreshProntuario()"
+        [estadoFormulario]="estadoFormulario"
+        (secaoAtualizada)="refreshFormulario()"
+        (subSecaoCriada)="refreshFormulario()"
+        (quesitoCriado)="refreshFormulario()"
+        (subQuesitoCriado)="refreshFormulario()"
+        (quesitoAtualizado)="refreshFormulario()"
+        (respostaAtualizada)="refreshFormulario()"
         (criarResposta)="salvarResposta($event)">
       </app-section>
       <hr class="section-separator">
     </div>
 
-    <div *ngIf="estadoProntuario === 'visualizacao'"  class="sections">
+    <div *ngIf="estadoFormulario === 'visualizacao'"  class="sections">
       <div class="llm-header">
         <h2 class="llm-title">Diagnóstico Pré-Cadastrado</h2>
         <img
@@ -86,7 +86,7 @@
                 ></textarea>
     </div>
     
-    <div *ngIf="estadoProntuario === 'visualizacao'"  class="sections">
+    <div *ngIf="estadoFormulario === 'visualizacao'"  class="sections">
       <div class="llm-header">
         <h2 class="llm-title">Diagnóstico de IA</h2>
         <img
@@ -106,24 +106,24 @@
     </div>
 
     <!-- Container para adicionar novas seções -->
-    <div *ngIf="estadoProntuario === 'editando'" class="add-section-container">
+    <div *ngIf="estadoFormulario === 'editando'" class="add-section-container">
       <input type="text" placeholder="Título da nova seção" [(ngModel)]="novaSecaoTitulo" class="new-section-input" />
       <button (click)="adicionarSecao()" class="add-section-button">Adicionar Seção</button>
     </div>
 
     <!-- Botão de salvar resposta-->
-    <div *ngIf="estadoProntuario === 'respondendo'" class="save-button">
+    <div *ngIf="estadoFormulario === 'respondendo'" class="save-button">
       <button (click)="salvarRespostasDissertativas()" class="save-btn save-btn-primary">Salvar Respostas</button>
     </div>
 
     <!-- Botão de finalizar prontuário-->
-    <div *ngIf="estadoProntuario === 'editando'" class="save-button">
+    <div *ngIf="estadoFormulario === 'editando'" class="save-button">
       <button (click)="finalizarEdicao()" class="save-btn save-btn-primary">Finalizar Edição</button>
     </div>
 
     <!-- Debug button -->
     <!-- <div class="action-buttons">
-      <button (click)="changeProntuarioStateDebug()" class="btn btn-primary">Change State</button>
+      <button (click)="changeFormularioStateDebug()" class="btn btn-primary">Change State</button>
     </div> -->
   </div>
 

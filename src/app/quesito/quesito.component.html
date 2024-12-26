@@ -1,13 +1,13 @@
-<div *ngIf="quesitoHabilitado || (estadoProntuario === 'visualizacao' || estadoProntuario === 'editando')">
+<div *ngIf="quesitoHabilitado || (estadoFormulario === 'visualizacao' || estadoFormulario === 'editando')">
   <div class="quesito">
     <!-- Número e Texto do Quesito -->
-    <div *ngIf="estadoProntuario === 'visualizacao' || estadoProntuario === 'respondendo'" class="quesito-header">
+    <div *ngIf="estadoFormulario === 'visualizacao' || estadoFormulario === 'respondendo'" class="quesito-header">
       
       <span style="font-size: 20px;">{{ quesito.numeracao }} {{ quesito.enunciado }}</span>
     </div>
 
     <!-- Modo de edição -->
-    <div *ngIf="estadoProntuario === 'editando'" class="quesito-header-edit">
+    <div *ngIf="estadoFormulario === 'editando'" class="quesito-header-edit">
       <div *ngIf="quesitoEditando; else displayMode">
         <input type="text" [(ngModel)]="quesitoEditandoEnunciado" />
         <button (click)="salvarEdicaoQuesito()">Salvar</button>
@@ -31,7 +31,7 @@
     </ng-template>
 
     <!-- Campo de Resposta -->
-    <div *ngIf="estadoProntuario === 'respondendo'" class="answer">
+    <div *ngIf="estadoFormulario === 'respondendo'" class="answer">
       <!-- Resposta dissertativa curta -->
       <!-- TODO: checar se ngModel funciona -->
       <input *ngIf="quesito.tipoResposta === 'DISSERTATIVA_CURTA'"
@@ -76,7 +76,7 @@
     </div>
 
     <!-- Estado de visualizacao -->
-    <div *ngIf="estadoProntuario === 'visualizacao'" class="answer">
+    <div *ngIf="estadoFormulario === 'visualizacao'" class="answer">
       <!-- Resposta dissertativa curta -->
       <div *ngIf="quesito.tipoResposta === 'DISSERTATIVA_CURTA'" class="resposta dissertativa-curta">
         {{ resposta.conteudo[0] || '' }}
@@ -105,7 +105,7 @@
     </div>
 
     <!-- Estado de editando -->
-    <div *ngIf="estadoProntuario === 'editando'" class="answer">
+    <div *ngIf="estadoFormulario === 'editando'" class="answer">
       <!-- Resposta dissertativa curta -->
       <div *ngIf="quesito.tipoResposta === 'DISSERTATIVA_CURTA'" class="resposta dissertativa-curta">
         {{ resposta.conteudo[0] || '' }}
@@ -151,7 +151,7 @@
   <div *ngIf="quesito.subQuesitos" class="subquesitos">
     <app-quesito *ngFor="let subquesito of quesito.subQuesitos; let i = index"
                   [quesito]="subquesito"
-                  [estadoProntuario]="estadoProntuario"
+                  [estadoFormulario]="estadoFormulario"
                   [quesitoIndex]="quesitoIndex + '.' + (i + 1)"
                   (quesitoAtualizado)="quesitoAtualizadoPropagate()"
                   (subQuesitoCriado)="subQuesitoCriadoPropagate()"></app-quesito>

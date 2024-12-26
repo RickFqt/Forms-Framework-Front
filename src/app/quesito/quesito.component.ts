@@ -7,7 +7,7 @@ import { QuesitoService } from '../quesito.service';
 import { Opcao, OpcaoComplete, OpcaoCreate } from '../opcao';
 import { QuesitoComplete, QuesitoCreate, QuesitoData } from '../quesito';
 import { FormsModule } from '@angular/forms';
-import { ProntuarioService } from '../prontuario.service';
+import { FormularioService } from '../formulario.service';
 import { ActivatedRoute } from '@angular/router';
 import { OpcaoService } from '../opcao.service';
 
@@ -22,11 +22,11 @@ export class QuesitoComponent implements OnInit, OnDestroy {
   route : ActivatedRoute = inject(ActivatedRoute);
   @Input() quesito: QuesitoComplete = {} as QuesitoComplete;
   @Input() quesitoIndex: string = '';
-  @Input() estadoProntuario: string = '';
+  @Input() estadoFormulario: string = '';
   quesitoService : QuesitoService = inject(QuesitoService);
   opcaoService : OpcaoService = inject(OpcaoService);
   respostaService : RespostaService = inject(RespostaService);
-  prontuarioService : ProntuarioService = inject(ProntuarioService);
+  formularioService : FormularioService = inject(FormularioService);
   selectedOpcoesIds: number[] = [];
   selectedConteudo: string[] = [];
 
@@ -38,7 +38,7 @@ export class QuesitoComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    if(this.estadoProntuario === 'visualizacao' || this.estadoProntuario === 'respondendo') {
+    if(this.estadoFormulario === 'visualizacao' || this.estadoFormulario === 'respondendo') {
       
       if(this.quesito.resposta != null) {
         const respostaId = this.quesito.resposta.id;
@@ -56,12 +56,12 @@ export class QuesitoComponent implements OnInit, OnDestroy {
     this.isQuesitoHabilitado(this.quesito.id);
 
     // TODO: Conseguir o id do prontuário por outro metodo
-    const prontuarioId = parseInt(this.route.snapshot.params['id'], 10);
+    const formularioId = parseInt(this.route.snapshot.params['id'], 10);
     
 
     this.inputChanged.pipe(
       debounceTime(500), // Tempo em milissegundos antes de salvar
-      switchMap(resposta => this.salvarRespostaDissertativa(prontuarioId)) // Chama o método de salvar
+      switchMap(resposta => this.salvarRespostaDissertativa(formularioId)) // Chama o método de salvar
     ).subscribe({
       next: () => {
         console.log('Resposta dissertativa salva com sucesso!');
@@ -163,13 +163,13 @@ export class QuesitoComponent implements OnInit, OnDestroy {
     this.inputChanged.next(value); // Emite a nova resposta
   } 
 
-  salvarRespostaDissertativa(prontuarioId: number): Observable<RespostaCreate> {
+  salvarRespostaDissertativa(formularioId: number): Observable<RespostaCreate> {
     const resposta: RespostaCreate = {
         conteudo: this.resposta.conteudo // Usar a variável que está ligando ao modelo
     };
 
     if (this.quesito.resposta === null) {
-        return this.prontuarioService.addResposta(prontuarioId, this.quesito.id, resposta);
+        return this.formularioService.addResposta(formularioId, this.quesito.id, resposta);
     } else {
         return this.respostaService.update(this.resposta.id, resposta);
     }

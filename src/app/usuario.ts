@@ -4,7 +4,7 @@ export interface Usuario {
     login: string;
     senha: string;
     tipoUsuario: string;
-    prontuariosIds: number[];
+    formulariosIds: number[];
 }
 
 export interface UsuarioCreate {

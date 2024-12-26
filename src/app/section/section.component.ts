@@ -20,7 +20,7 @@ import { QuesitoService } from '../quesito.service';
 export class SectionComponent {
   @Input() section: SecaoComplete = {} as SecaoComplete;
   @Input() sectionIndex: string = ''; // Para numerar as seções e subseções
-  @Input() estadoProntuario: string = '';
+  @Input() estadoFormulario: string = '';
   isVisible: boolean = true;
   secaoService: SecaoService = inject(SecaoService);
 
@@ -87,7 +87,7 @@ export class SectionComponent {
       nivel: novaSecaoCriada.nivel,
       subSecoesIds: novaSecaoCriada.subSecoesIds,
       superSecaoId: novaSecaoCriada.superSecaoId,
-      prontuarioId: novaSecaoCriada.prontuarioId,
+      formularioId: novaSecaoCriada.formularioId,
       quesitosIds: novaSecaoCriada.quesitosIds,
       quesitos: [],
       subSecoes: []
@@ -160,9 +160,9 @@ export class SectionComponent {
     return subItem as SecaoComplete;
   }
 
-  salvarRespostasDissertativas(prontuarioId: number) {
-    const salvarRequisicoesQuesitos = this.quesitoComponents.map(quesitoComponent => quesitoComponent.salvarRespostaDissertativa(prontuarioId));
-    const salvarRequisicoesSubSecoes = this.subSecaoComponents.map(subSecaoComponent => subSecaoComponent.salvarRespostasDissertativas(prontuarioId));
+  salvarRespostasDissertativas(formularioId: number) {
+    const salvarRequisicoesQuesitos = this.quesitoComponents.map(quesitoComponent => quesitoComponent.salvarRespostaDissertativa(formularioId));
+    const salvarRequisicoesSubSecoes = this.subSecaoComponents.map(subSecaoComponent => subSecaoComponent.salvarRespostasDissertativas(formularioId));
 
     Promise.all([...salvarRequisicoesQuesitos, ...salvarRequisicoesSubSecoes]).then(() => {
       

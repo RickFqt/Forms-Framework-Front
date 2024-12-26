@@ -1,6 +1,6 @@
 import { SecaoComplete } from "./secao";
 
-export interface Prontuario {
+export interface Formulario {
     id: number;
     nome: string;
     descricao: string;
@@ -11,7 +11,7 @@ export interface Prontuario {
     secoesIds: number[];
 }
 
-export class ProntuarioData implements Prontuario {
+export class FormularioData implements Formulario {
     id: number;
     nome: string;
     descricao: string;
@@ -46,7 +46,7 @@ export class ProntuarioData implements Prontuario {
     }
 }
 
-export class ProntuarioComplete {
+export class FormularioComplete {
     id: number;
     nome: string;
     descricao: string;
