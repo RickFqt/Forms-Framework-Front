@@ -1,0 +1,131 @@
+<div class="container">
+	<!-- Bloco 1: Lateral fixa com logo e botão -->
+	<div class="sidebar">
+		<img src="DASH_logo.png" alt="Logo" class="logo">
+		<a [routerLink]="['/home']">
+      <img class="back-button"
+        [ngClass]="{ 'flipped': true }"
+        [src]="buttonSrc" 
+        alt="Botão"
+        (mouseenter)="onHoverButton()"
+        (mouseleave)="onLeaveButton()">
+    </a>
+	</div>
+
+	<!-- Bloco 2: Principal com as informações do formulário -->
+	<div class="main-content">
+
+    <div *ngIf="mostrarPopUp" class="popup-overlay" (click)="fecharPopUp()">
+      <div [ngClass]="{ 'popup-content': !ehMensagemErro, 'popup-content-error': ehMensagemErro }" (click)="$event.stopPropagation()">
+        <span class="close" (click)="fecharPopUp()">&times;</span>
+        <p>{{ mensagemSucesso }}</p>
+      </div>
+    </div>
+
+    <div class="header">
+      <h1 class="title">{{ prontuario.nome }} <span *ngIf="prontuario.ehTemplate">&#64;Template</span></h1>
+      <span>
+        <img *ngIf="prontuario.ehTemplate" src="plus_sign.svg" alt="Criar prontuario a partir de template" class="top-right-buttons plus-button"
+        (click)="makeProntuarioFromTemplate()">
+        <img src="edit_icon.svg" alt="Editar prontuário" class="top-right-buttons edit-button"
+        (click)="changeProntuarioState('editando')">
+        <img *ngIf="!prontuario.ehTemplate" src="responder_icon.svg" alt="Responder prontuario" class="top-right-buttons answer-button"
+        (click)="changeProntuarioState('respondendo')">
+        <img src="eye_icon.svg" alt="Visualizar prontuario" class="top-right-buttons plus-button"
+        (click)="changeProntuarioState('visualizacao')">
+        <img src="copy_icon.svg" alt="Duplicar prontuario" class="top-right-buttons copy-button"
+        (click)="makeProntuarioCopy()">
+        <img src="pdf_icon.svg" alt="Exportar para PDF" class="top-right-buttons pdf-button"
+        (click)="generatePDF()">
+        <!-- <button (click)="generatePDF()">Exportar para PDF</button> -->
+      </span>
+      <!-- <button class="top-right-button">Clique aqui</button> -->
+    </div>
+    <!-- <div class="header">
+    </div> -->
+    <!-- Título -->
+    
+    <!-- Descrição -->
+    <p class="description">{{ prontuario.descricao }}</p>
+
+    <hr class="section-separator">
+    
+    <!-- Seções -->
+    <div class="sections" *ngFor="let section of prontuario.secoes; let i = index">
+      <app-section 
+        [section]="section" 
+        [sectionIndex]="(i + 1).toString()" 
+        [estadoProntuario]="estadoProntuario"
+        (secaoAtualizada)="refreshProntuario()"
+        (subSecaoCriada)="refreshProntuario()"
+        (quesitoCriado)="refreshProntuario()"
+        (subQuesitoCriado)="refreshProntuario()"
+        (quesitoAtualizado)="refreshProntuario()"
+        (respostaAtualizada)="refreshProntuario()"
+        (criarResposta)="salvarResposta($event)">
+      </app-section>
+      <hr class="section-separator">
+    </div>
+
+    <div *ngIf="estadoProntuario === 'visualizacao'"  class="sections">
+      <div class="llm-header">
+        <h2 class="llm-title">Diagnóstico Pré-Cadastrado</h2>
+        <img
+          class="llm-button"
+          src="DASH_logo.svg"
+          alt="Gerar Diagnóstico por IA"
+          (click)="gerarDiagnosticoPreCadastrado()"
+        />
+      </div>
+      <textarea 
+                id="diagnosticoPreCadastrado"
+                class="campoDiagnosticoPreCadastrado"
+                [value]="displayedDiagnosticoText"
+                [disabled]="true"
+                placeholder="Recupere seu diagnóstico pré-cadastrado"
+                ></textarea>
+    </div>
+    
+    <div *ngIf="estadoProntuario === 'visualizacao'"  class="sections">
+      <div class="llm-header">
+        <h2 class="llm-title">Diagnóstico de IA</h2>
+        <img
+          class="llm-button"
+          src="llm_button.svg"
+          alt="Gerar Diagnóstico por IA"
+          (click)="gerarDiagnosticoLLM()"
+        />
+      </div>
+      <textarea 
+                id="diagnosticoLLM"
+                class="long-answer"
+                [value]="displayedText"
+                [disabled]="true"
+                placeholder="Gere seu diagnóstico com IA"
+                ></textarea>
+    </div>
+
+    <!-- Container para adicionar novas seções -->
+    <div *ngIf="estadoProntuario === 'editando'" class="add-section-container">
+      <input type="text" placeholder="Título da nova seção" [(ngModel)]="novaSecaoTitulo" class="new-section-input" />
+      <button (click)="adicionarSecao()" class="add-section-button">Adicionar Seção</button>
+    </div>
+
+    <!-- Botão de salvar resposta-->
+    <div *ngIf="estadoProntuario === 'respondendo'" class="save-button">
+      <button (click)="salvarRespostasDissertativas()" class="save-btn save-btn-primary">Salvar Respostas</button>
+    </div>
+
+    <!-- Botão de finalizar prontuário-->
+    <div *ngIf="estadoProntuario === 'editando'" class="save-button">
+      <button (click)="finalizarEdicao()" class="save-btn save-btn-primary">Finalizar Edição</button>
+    </div>
+
+    <!-- Debug button -->
+    <!-- <div class="action-buttons">
+      <button (click)="changeProntuarioStateDebug()" class="btn btn-primary">Change State</button>
+    </div> -->
+  </div>
+
+</div>
+  

@@ -1,0 +1,71 @@
+<div class="section">
+
+    <!-- Cabeçalho da Seção/Subseção -->
+    <!-- Modo de visualização/respondendo -->
+    <div *ngIf="estadoProntuario === 'visualizacao' || estadoProntuario === 'respondendo'" class="section-header-hover" (click)="toggleSection()">
+      <h2 class="section-title">{{ sectionIndex }}. {{ section.titulo }}</h2>
+      <img
+        class="toggle-button"
+        src="section_button.png"
+        alt="Mostrar/Esconder"
+        [ngClass]="{ 'flipped': isVisible }"
+      />
+    </div>
+
+    <!-- Modo de edição -->
+    <div *ngIf="estadoProntuario === 'editando'" class="section-header-edit">
+      <!-- <h2 class="section-title">{{ sectionIndex }}. {{ section.titulo }}</h2> -->
+      <div *ngIf="secaoEditando; else displayMode">
+        <input type="text" [(ngModel)]="secaoEditandoTitulo" />
+        <button (click)="salvarEdicaoSecao()">Salvar</button>
+        <button (click)="cancelarEdicao()">Cancelar</button>
+      </div>
+    </div>
+
+    <ng-template #displayMode class="section-header-edit">
+      <h2 class="section-title">{{ section.numeracao }} {{ section.titulo }}</h2>
+      <button (click)="toggleAdicionarSubitemButtons()">+</button>
+      <div *ngIf="mostrarBotaoSubitem">
+        <button (click)="adicionarSubSecao()">Adicionar SubSecao</button>
+        <button (click)="adicionarQuesito()">Adicionar Quesito</button>
+        <button (click)="editarSecao()">Editar</button>
+      </div>
+    </ng-template>
+  
+    <!-- Conteúdo da Seção/Subseção -->
+    <div [ngClass]="{'section-content': true, 'expanded': isVisible, 'collapsed': !isVisible}">
+      <!-- Quesitos / SubSecoes -->
+      <div *ngFor="let subItem of section.subItens; let i = index">
+        <!-- Quesito -->
+        <div class = "quesitos" *ngIf="subItem.tipoDeItem === 'quesito'">
+          <app-quesito 
+            [quesito]="castToQuesitoComplete(subItem)" 
+            [quesitoIndex]="sectionIndex + '.' + (i + 1)" 
+            [estadoProntuario]="estadoProntuario"
+            (subQuesitoCriado)="adicionarSubQuesitoPropagate()"
+            (quesitoAtualizado)="quesitoAtualizadoPropagate()"
+            (respostaAtualizada)="respostaAtualizadaPropagate()"
+            (criarResposta)="criarRespostaPropagate($event)">
+          </app-quesito>
+        </div>
+
+        <!-- SubSecao -->
+        <div *ngIf="subItem.tipoDeItem === 'secao'">
+          <app-section
+            [section]="castToSecaoComplete(subItem)"
+            [sectionIndex]="sectionIndex + '.' + (i + 1)"
+            [estadoProntuario]="estadoProntuario"
+            (secaoAtualizada)="atualizarSecaoPropagate($event)"
+            (subSecaoCriada)="adicionarSubSecaoPropagate($event)"
+            (quesitoCriado)="adicionarQuesitoPropagate()"
+            (subQuesitoCriado)="adicionarSubQuesitoPropagate()"
+            (quesitoAtualizado)="quesitoAtualizadoPropagate()"
+            (respostaAtualizada)="respostaAtualizadaPropagate()"
+            (criarResposta)="criarRespostaPropagate($event)">
+          </app-section>
+        </div>
+      </div>
+
+    </div>
+  </div>
+  

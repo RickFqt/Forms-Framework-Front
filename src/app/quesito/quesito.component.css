@@ -1,0 +1,82 @@
+* {
+  color: #8FA7B2;
+  font-family: 'Nunito', sans-serif;
+}
+
+.quesito {
+  /* display: flex; */
+  margin-bottom: 10px ;
+}
+
+.quesito-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.quesito-header-edit {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+}
+
+.answer {
+  display: flex;
+  flex-direction: column;
+  gap: 10px; /* Espaçamento entre as opções */
+}
+
+.short-answer {
+  width: 460px;
+  padding: 5px;
+  border-radius: 16px;
+  height: 42px;
+  background-color: #F5F8FA;
+  border: 1px solid #D3E2E5;
+}
+
+.long-answer {
+  width: 100%;
+  height: 100px;
+  padding: 10px;
+  border-radius: 16x;
+  background-color: #F5F8FA;
+  border: 1px solid #D3E2E5;
+  resize: vertical; /* Permite aumentar o tamanho */
+}
+
+.choices-container {
+  display: flex;
+  align-items: center; /* Alinha verticalmente no centro */
+  gap: 15px; /* Espaçamento entre cada opção */
+}
+
+.choice {
+  display: flex;
+  align-items: center;
+  margin-bottom: 5px;
+  font-size: 16px;
+}
+
+.choice input {
+  margin-right: 10px;
+}
+
+.resposta {
+  border-radius: 16px;
+  background-color: #F5F8FA;
+  border: 1px solid #D3E2E5;
+  padding: 10px;
+  /* margin-bottom: 40px; */
+  /* margin-top: 40px; */
+  /* height: 42px; */
+}
+
+.dissertativa-curta {
+  width: 460px; /* Tamanho da resposta dissertativa curta */
+}
+
+.dissertativa-longa {
+  width: 100%; /* Tamanho maior para resposta longa */
+  min-height: 100px;
+}

@@ -1,0 +1,160 @@
+<div *ngIf="quesitoHabilitado || (estadoProntuario === 'visualizacao' || estadoProntuario === 'editando')">
+  <div class="quesito">
+    <!-- Número e Texto do Quesito -->
+    <div *ngIf="estadoProntuario === 'visualizacao' || estadoProntuario === 'respondendo'" class="quesito-header">
+      
+      <span style="font-size: 20px;">{{ quesito.numeracao }} {{ quesito.enunciado }}</span>
+    </div>
+
+    <!-- Modo de edição -->
+    <div *ngIf="estadoProntuario === 'editando'" class="quesito-header-edit">
+      <div *ngIf="quesitoEditando; else displayMode">
+        <input type="text" [(ngModel)]="quesitoEditandoEnunciado" />
+        <button (click)="salvarEdicaoQuesito()">Salvar</button>
+        <button (click)="cancelarEdicao()">Cancelar</button>
+      </div>
+    </div>
+
+    <ng-template #displayMode class="quesito-header-edit">
+      <span style="font-size: 20px;">{{ quesito.numeracao }} {{ quesito.enunciado }}</span>
+      <button (click)="toggleAdicionarSubitemButtons()">+</button>
+      <div *ngIf="mostrarBotaoSubitem">
+        <button (click)="adicionarSubQuesito()">Adicionar SubQuesito</button>
+        <button (click)="editarQuesito()">Editar</button>
+        <select [(ngModel)]="tipoRespostaAtual" (change)="atualizarTipoResposta()">
+          <option value="DISSERTATIVA_CURTA">Dissertativa Curta</option>
+          <option value="DISSERTATIVA_LONGA">Dissertativa Longa</option>
+          <option value="OBJETIVA_SIMPLES">Objetiva Simples</option>
+          <option value="OBJETIVA_MULTIPLA">Objetiva Múltipla</option>
+        </select>
+      </div>
+    </ng-template>
+
+    <!-- Campo de Resposta -->
+    <div *ngIf="estadoProntuario === 'respondendo'" class="answer">
+      <!-- Resposta dissertativa curta -->
+      <!-- TODO: checar se ngModel funciona -->
+      <input *ngIf="quesito.tipoResposta === 'DISSERTATIVA_CURTA'"
+              class="short-answer" 
+              type="text" 
+              [(ngModel)]="resposta.conteudo[0]"
+              placeholder="Escreva sua resposta"
+              (input)="onInputChange($event)">
+
+      <!-- Resposta dissertativa longa -->
+      <!-- TODO: checar se ngModel funciona -->
+      <textarea *ngIf="quesito.tipoResposta === 'DISSERTATIVA_LONGA'"
+                class="long-answer"
+                [(ngModel)]="resposta.conteudo[0]"
+                placeholder="Escreva sua resposta"
+                (input)="onInputChange($event)"></textarea>
+
+      <!-- Objetiva simples -->
+      <div *ngIf="quesito.tipoResposta === 'OBJETIVA_SIMPLES'" class="choices-container">
+        <div *ngFor="let opcao of quesito.opcoes" class="choice">
+          <input 
+            type="radio" 
+            [name]="'choice' + quesitoIndex" 
+            [value]="opcao"
+            [checked]="selectedOpcoesIds[0] === opcao.id"
+            (change)="salvarRespostaSimples(opcao)">
+          <span>{{ opcao.textoAlternativa }}</span>
+        </div>
+      </div>
+
+      <!-- Objetiva múltipla -->
+      <div *ngIf="quesito.tipoResposta === 'OBJETIVA_MULTIPLA'" class="choices-container">
+        <div *ngFor="let opcao of quesito.opcoes" class="choice">
+          <input 
+          type="checkbox" 
+          [value]="opcao"
+          [checked]="selectedOpcoesIds.includes(opcao.id)"
+          (change)="salvarRespostaMultipla(opcao, $event)">
+          <span>{{ opcao.textoAlternativa }}</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Estado de visualizacao -->
+    <div *ngIf="estadoProntuario === 'visualizacao'" class="answer">
+      <!-- Resposta dissertativa curta -->
+      <div *ngIf="quesito.tipoResposta === 'DISSERTATIVA_CURTA'" class="resposta dissertativa-curta">
+        {{ resposta.conteudo[0] || '' }}
+      </div>
+
+      <!-- Resposta dissertativa longa -->
+      <div *ngIf="quesito.tipoResposta === 'DISSERTATIVA_LONGA'" class="resposta dissertativa-longa">
+        {{ resposta.conteudo[0] || '' }}
+      </div>
+
+      <!-- Objetiva simples -->
+      <div *ngIf="quesito.tipoResposta === 'OBJETIVA_SIMPLES'" class="choices-container">
+        <span *ngFor="let option of quesito.opcoes">
+          <input type="radio" [checked]="resposta.opcoesMarcadasIds.includes(option.id)" disabled>
+          {{ option.textoAlternativa }}
+        </span>
+      </div>
+
+      <!-- Objetiva múltipla -->
+      <div *ngIf="quesito.tipoResposta === 'OBJETIVA_MULTIPLA'" class="choices-container">
+        <span *ngFor="let option of quesito.opcoes">
+          <input type="checkbox" [checked]="resposta.opcoesMarcadasIds.includes(option.id)" disabled>
+          {{ option.textoAlternativa }}
+        </span>
+      </div>
+    </div>
+
+    <!-- Estado de editando -->
+    <div *ngIf="estadoProntuario === 'editando'" class="answer">
+      <!-- Resposta dissertativa curta -->
+      <div *ngIf="quesito.tipoResposta === 'DISSERTATIVA_CURTA'" class="resposta dissertativa-curta">
+        {{ resposta.conteudo[0] || '' }}
+      </div>
+
+      <!-- Resposta dissertativa longa -->
+      <div *ngIf="quesito.tipoResposta === 'DISSERTATIVA_LONGA'" class="resposta dissertativa-longa">
+        {{ resposta.conteudo[0] || '' }}
+      </div>
+
+      <div *ngIf="quesito.tipoResposta === 'OBJETIVA_SIMPLES' || quesito.tipoResposta === 'OBJETIVA_MULTIPLA'">
+        <span *ngFor="let opcao of quesito.opcoes; let i = index">
+
+          <span *ngIf="opcaoEditando[opcao.id]; else displayModeOpcao">
+            <input type="text" [(ngModel)]="opcaoEditandoTextoAlternativa" />
+            <button (click)="salvarEdicaoOpcao(opcao)">Salvar</button>
+            <button (click)="cancelarEdicaoOpcao(opcao)">Cancelar</button>
+          </span>
+
+          <ng-template #displayModeOpcao>
+            <span *ngIf="quesito.tipoResposta === 'OBJETIVA_SIMPLES'">
+              <input type="radio" [checked]="resposta.opcoesMarcadasIds.includes(opcao.id)" disabled>
+            </span>
+  
+            <span *ngIf="quesito.tipoResposta === 'OBJETIVA_MULTIPLA'">
+              <input type="checkbox" [checked]="resposta.opcoesMarcadasIds.includes(opcao.id)" disabled>
+            </span>
+            {{ opcao.textoAlternativa }}
+            <button (click)="toggleMostrarOpcaoButtons(opcao.id)">+</button>
+            <span *ngIf="mostrarOpcaoButtons[opcao.id]">
+              <button (click)="editarOpcao(opcao)">Editar</button>
+              <button (click)="removerOpcao(opcao)">Remover</button>
+            </span>
+          </ng-template>
+        </span>
+        <button (click)="adicionarOpcao()">Adicionar Opção</button>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Subquesitos (recursivo) -->
+  <div *ngIf="quesito.subQuesitos" class="subquesitos">
+    <app-quesito *ngFor="let subquesito of quesito.subQuesitos; let i = index"
+                  [quesito]="subquesito"
+                  [estadoProntuario]="estadoProntuario"
+                  [quesitoIndex]="quesitoIndex + '.' + (i + 1)"
+                  (quesitoAtualizado)="quesitoAtualizadoPropagate()"
+                  (subQuesitoCriado)="subQuesitoCriadoPropagate()"></app-quesito>
+  </div>
+</div>
+  

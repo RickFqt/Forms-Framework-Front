@@ -1,0 +1,302 @@
+* {
+  color: #4D6F80;
+}
+
+/* Container principal */
+.container {
+  background-color: #EBF2F5;
+  display: flex;
+  min-height: 100vh; /* Garante que a altura mínima seja a da tela */
+  font-family: 'Nunito', sans-serif;
+  color: #4D6F80;
+}
+
+/* Bloco 1: Lateral fixa */
+.sidebar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100vh; /* Sempre terá a altura da tela */
+  width: 5vw; /* 6.7% da largura da tela */
+  min-width: 96px; /* Largura mínima de 96px */
+  background-color: #85CEC3; /* Cor de fundo do bloco lateral */
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between; /* Espaço entre logo e botão */
+  align-items: center;
+  padding: 20px 0; /* Espaçamento interno */
+}
+
+.logo {
+  max-width: 80%; /* Logo se ajusta ao tamanho da sidebar */
+}
+
+.back-button {
+  margin-bottom: 20px;
+  padding: 10px 20px;
+  width: 100px; /* Botão ocupa 80% da largura da sidebar */
+  /* background-color: #3498db; */
+  /* color: white; */
+  /* border: none; */
+  /* border-radius: 5px; */
+  cursor: pointer;
+}
+
+
+/* Bloco 2: Principal */
+.main-content {
+  margin-left: calc(max(5vw, 96px) + 21px); /* Distância de 21px do bloco lateral */
+  margin-right: 21px; /* Margem de 21px da direita */
+  margin-top: 11px;
+  margin-bottom: 11px;
+  background-color: white;
+  border-radius: 15px; /* Pontas arredondadas */
+  padding: 20px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Sombra leve */
+  flex-grow: 1; /* Ocupa o restante da largura da tela */
+  border: 0.5px solid #D3E2E5;
+}
+
+/* Título */
+.title {
+  margin-left: 42px;
+  /* margin-top: 63px; */
+  font-size: 50px;
+  font-weight: 800;
+}
+
+/* Descrição */
+.description {
+  margin-left: 42px;
+  margin-top: 34px;
+  font-size: 25px;
+}
+
+/* Separador das seções */
+.section-separator {
+  margin: 20px 0;
+  border: none;
+  height: 1px;
+  background-color: #D3E2E5;
+}
+
+/* Cabeçalho da Seção */
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+
+
+.top-right-buttons {
+  width: 60px;
+  height: 60px;
+  /* background-color: #19b614; */
+  color: white;
+  border: none;
+  border-radius: 5px;
+  padding: 5px 10px;
+  cursor: pointer;
+}
+
+.top-right-buttons:hover {
+  background-color: #cfdbe0;
+}
+
+.answer-button {
+  padding-right: 5px;
+  margin-right: 10px;
+}
+
+.edit-button {
+  margin-right: 10px;
+}
+
+.plus-button {
+  margin-right: 10px;
+}
+
+.copy-button {
+  margin-right: 10px;
+}
+
+.pdf-button {
+  margin-right: 42px;
+}
+
+/* Título da Seção */
+.section-title {
+  font-size: 18px;
+  font-weight: bold;
+}
+
+/* Botão de Mostrar/Esconder Seção */
+.toggle-button {
+  background-color: #3498db;
+  color: white;
+  border: none;
+  padding: 5px 10px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.toggle-button:hover {
+  background-color: #cfdbe0;
+}
+
+/* Conteúdo da Seção */
+.section-content {
+  margin-left: 42px;
+  margin-top: 15px;
+  font-size: 14px;
+  color: #333;
+}
+
+/* Separador das Subseções */
+.subsection-separator {
+  margin: 10px 0;
+  border: none;
+  height: 1px;
+  background-color: #ccc;
+}
+
+/* Título da Subseção */
+.subsection-title {
+  font-size: 16px;
+  font-weight: bold;
+}
+
+.long-answer {
+  width: 100%;
+  height: 200px;
+  padding: 10px;
+  border-radius: 16px;
+  background-color: #F5F8FA;
+  border: 1px solid #D3E2E5;
+  /* resize: vertical; Permite aumentar o tamanho */
+  font-size: 16px;
+  margin-top: 20px;
+  font-family: 'Nunito', sans-serif;
+  color: #4D6F80;
+}
+
+.llm-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.llm-title {
+  font-size: 32px;
+  font-weight: bold;
+}
+
+.llm-button {
+  width: 60px;
+  height: 60px;
+  /* background-color: #19b614; */
+  color: white;
+  border: none;
+  border-radius: 5px;
+  padding: 5px 10px;
+  cursor: pointer;
+}
+
+.llm-button:hover {
+  background-color: #cfdbe0;
+}
+.sections {
+  margin-left: 42px;
+  margin-right: 42px;
+}
+
+.popup-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+}
+
+.popup-content {
+  background-color: white;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  position: relative;
+}
+
+.popup-content p {
+  font-size: 18px;
+  color: green;
+}
+
+.popup-content-error {
+  background-color: white;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  position: relative;
+}
+
+.popup-content-error p {
+  font-size: 18px;
+  color: red;
+}
+
+.close {
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  font-size: 24px;
+  cursor: pointer;
+}
+
+.save-button {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 20px;
+  color: green;
+}
+
+.save-btn {
+  padding: 10px 20px;
+  margin: 0 42px;
+  background-color: #3498db;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 24px;
+  font-family: 'Nunito', sans-serif;
+}
+
+.save-btn:hover {
+  background-color: #cfdbe0;
+}
+
+.save-btn-primary {
+  background-color: #85CEC3;
+}
+
+.campoDiagnosticoPreCadastrado {
+  width: 100%;
+  height: 60px;
+  padding: 10px;
+  border-radius: 16px;
+  background-color: #F5F8FA;
+  border: 1px solid #D3E2E5;
+  /* resize: vertical; Permite aumentar o tamanho */
+  font-size: 16px;
+  margin-top: 20px;
+  font-family: 'Nunito', sans-serif;
+  color: #4D6F80;
+}
