@@ -79,5 +79,8 @@ export class FormularioService {
     );
   }
 
-
+  getInformacoesArquivo(idFormulario: number): Observable<FormularioComplete> {
+    return this.http.get<FormularioComplete>(`/api/formulario/${idFormulario}/informacoesArquivo`);
+  }
+  
 }

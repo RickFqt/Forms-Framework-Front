@@ -192,7 +192,7 @@ export class FormularioViewComponent {
   }
 
   generatePDF() {
-    this.formularioService.getByIdComplete(this.formulario.id, false).subscribe({
+    this.formularioService.getInformacoesArquivo(this.formulario.id).subscribe({
       next: (formulario) => {
         console.log(formulario)
         // Cria uma nova instância de jsPDF
