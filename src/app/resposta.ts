@@ -9,9 +9,13 @@ export interface Resposta {
 
 export class RespostaCreate {
     conteudo: string[];
+    tipoResposta: String;
 
-    constructor(conteudo: string[] = []) {
+    constructor(conteudo: string[] = [],
+                tipoResposta: String = '') 
+    {
         this.conteudo = conteudo;
+        this.tipoResposta = tipoResposta;
     }
 }
 
@@ -20,16 +24,19 @@ export class RespostaComplete {
     conteudo : string[];
     opcoesMarcadas : OpcaoComplete[];
     idQuesito : number;
+    tipoResposta : String;
 
     constructor(
         id: number = 0,
         conteudo: string[] = [],
         opcoesMarcadas: OpcaoComplete[] = [],
-        idQuesito: number = 0
+        idQuesito: number = 0,
+        tipoResposta: String = ''
     ) {
         this.id = id;
         this.conteudo = conteudo;
         this.opcoesMarcadas = opcoesMarcadas;
         this.idQuesito = idQuesito;
+        this.tipoResposta = tipoResposta;
     }
 }

@@ -97,7 +97,8 @@ export class QuesitoComponent implements OnInit, OnDestroy {
     this.selectedConteudo = [opcao.textoAlternativa];
 
     const resposta : RespostaCreate = {
-      conteudo: [opcao.textoAlternativa]
+      conteudo: [opcao.textoAlternativa],
+      tipoResposta: this.quesito.tipoResposta
     }
     
     this.salvarResposta(resposta, opcao);
@@ -119,7 +120,8 @@ export class QuesitoComponent implements OnInit, OnDestroy {
     }
 
     const resposta : RespostaCreate = {
-      conteudo: this.selectedConteudo
+      conteudo: this.selectedConteudo,
+      tipoResposta: this.quesito.tipoResposta
     }
 
     this.salvarResposta(resposta, opcao);
@@ -163,9 +165,10 @@ export class QuesitoComponent implements OnInit, OnDestroy {
     this.inputChanged.next(value); // Emite a nova resposta
   } 
 
-  salvarRespostaDissertativa(formularioId: number): Observable<RespostaCreate> {
+  salvarRespostaDissertativa(formularioId: number): Observable<Resposta> {
     const resposta: RespostaCreate = {
-        conteudo: this.resposta.conteudo // Usar a variável que está ligando ao modelo
+        conteudo: this.resposta.conteudo, // Usar a variável que está ligando ao modelo
+        tipoResposta: this.quesito.tipoResposta
     };
 
     if (this.quesito.resposta === null) {
@@ -220,6 +223,7 @@ export class QuesitoComponent implements OnInit, OnDestroy {
     const novoQuesito : QuesitoCreate = {
       enunciado: 'Novo SubQuesito',
       tipoResposta: 'DISSERTATIVA_CURTA',
+      obrigatorio: false
     };
 
     // Adiciona a novo quesito ao prontuário

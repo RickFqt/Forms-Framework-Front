@@ -74,13 +74,13 @@
           class="llm-button"
           src="DASH_logo.svg"
           alt="Gerar Diagnóstico por IA"
-          (click)="gerarDiagnosticoPreCadastrado()"
+          (click)="gerarFeedbackPreCadastrado()"
         />
       </div>
       <textarea 
-                id="diagnosticoPreCadastrado"
-                class="campoDiagnosticoPreCadastrado"
-                [value]="displayedDiagnosticoText"
+                id="feedbackPreCadastrado"
+                class="campoFeedbackPreCadastrado"
+                [value]="displayedFeedbackText"
                 [disabled]="true"
                 placeholder="Recupere seu diagnóstico pré-cadastrado"
                 ></textarea>
@@ -93,11 +93,11 @@
           class="llm-button"
           src="llm_button.svg"
           alt="Gerar Diagnóstico por IA"
-          (click)="gerarDiagnosticoLLM()"
+          (click)="gerarFeedbackLLM()"
         />
       </div>
       <textarea 
-                id="diagnosticoLLM"
+                id="feedbackLLM"
                 class="long-answer"
                 [value]="displayedText"
                 [disabled]="true"

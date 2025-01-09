@@ -1,4 +1,4 @@
-export interface Diagnostico {
+export interface Feedback {
     id: number,
     descricao: string,
     prontuarioId: number,

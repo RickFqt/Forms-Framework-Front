@@ -4,7 +4,7 @@ import { Formulario, FormularioComplete } from './formulario';
 import { Observable, catchError, throwError } from 'rxjs';
 import { Secao, SecaoCreate } from './secao';
 import { Resposta, RespostaCreate } from './resposta';
-import { Diagnostico } from './diagnostico';
+import { Feedback } from './feedback';
 
 @Injectable({
   providedIn: 'root'
@@ -50,8 +50,8 @@ export class FormularioService {
     return this.http.post<Formulario>(`/api/formulario/${idFormulario}/duplicar`, null, {params});
   }
 
-  addFromTemplate(idFormulario: number): Observable<Formulario> {
-    return this.http.post<Formulario>(`/api/formulario/template/${idFormulario}/addFormulario`, null);
+  addFromTemplate(idFormulario: number, idUsuario: number): Observable<Formulario> {
+    return this.http.post<Formulario>(`/api/formulario/template/${idFormulario}/addFormulario/${idUsuario}`, null);
   }
 
   addSecao(idFormulario: number, secao: SecaoCreate): Observable<Secao> {
@@ -62,12 +62,12 @@ export class FormularioService {
     return this.http.post<Resposta>(`/api/formulario/${idFormulario}/quesito/${idQuesito}/addResposta`, resposta);
   }
 
-  gerarDiagnosticoLLM(idFormulario: number): Observable<{conteudo: string}> {
-    return this.http.get<{conteudo: string}>(`/api/formulario/${idFormulario}/diagnosticoLLM`);
+  gerarFeedbackLLM(idFormulario: number): Observable<{conteudo: string}> {
+    return this.http.get<{conteudo: string}>(`/api/formulario/${idFormulario}/feedbackLLM`);
   }
 
-  gerarDiagnostico(idFormulario: number): Observable<Diagnostico> {
-    return this.http.get<Diagnostico>(`/api/formulario/${idFormulario}/diagnostico`);
+  gerarFeedback(idFormulario: number): Observable<Feedback> {
+    return this.http.get<Feedback>(`/api/formulario/${idFormulario}/feedback`);
   }
 
   finalizarFormulario(idFormulario: number): Observable<Formulario> {

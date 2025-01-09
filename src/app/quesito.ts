@@ -70,10 +70,12 @@ export class QuesitoData implements Quesito {
 export class QuesitoCreate {
     enunciado: string;
     tipoResposta: string;
+    obrigatorio: boolean;
 
     constructor(enunciado: string = '') {
         this.enunciado = enunciado;
         this.tipoResposta = 'DISSERTATIVA_CURTA';
+        this.obrigatorio = false;
     }
 }
 

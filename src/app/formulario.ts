@@ -55,7 +55,7 @@ export class FormularioComplete {
     ehTemplate: boolean;
     usuarioId: number;
     secoes: SecaoComplete[];
-    diagnosticoLLM: string;
+    feedbackLLM: string;
 
     constructor(
         id: number = 0,
@@ -66,7 +66,7 @@ export class FormularioComplete {
         ehTemplate: boolean = false,
         usuarioId: number = 0,
         secoes: SecaoComplete[] = [],
-        diagnosticoLLM: string = ''
+        feedbackLLM: string = ''
     ) {
         this.id = id;
         this.nome = nome;
@@ -76,6 +76,6 @@ export class FormularioComplete {
         this.ehTemplate = ehTemplate;
         this.usuarioId = usuarioId;
         this.secoes = secoes;
-        this.diagnosticoLLM = diagnosticoLLM;
+        this.feedbackLLM = feedbackLLM;
     }
 }

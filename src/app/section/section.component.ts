@@ -111,6 +111,7 @@ export class SectionComponent {
     const novoQuesito : QuesitoCreate = {
       enunciado: 'Novo Quesito',
       tipoResposta: 'DISSERTATIVA_CURTA',
+      obrigatorio: false
     };
 
     // Adiciona a novo quesito ao prontuário

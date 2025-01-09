@@ -43,7 +43,7 @@ export class FormularioViewComponent {
 
   formulario : FormularioComplete = {} as FormularioComplete;
   displayedText: string = '';
-  displayedDiagnosticoText: string = '';
+  displayedFeedbackText: string = '';
 
   mensagemSucesso: string | null = null;
   mostrarPopUp: boolean = false;
@@ -52,7 +52,7 @@ export class FormularioViewComponent {
   ngOnInit() {
     this.changeFormularioState('visualizacao');
     this.refreshFormularioAsync().subscribe(() => {
-      this.displayedText = this.formulario.diagnosticoLLM || "";
+      this.displayedText = this.formulario.feedbackLLM || "";
     });
   }
 
@@ -122,8 +122,9 @@ export class FormularioViewComponent {
 
   async makeFormularioFromTemplate(): Promise<void> {
     const formularioId = parseInt(this.route.snapshot.params['id'], 10);
-
-    const formularioCriado = await firstValueFrom(this.formularioService.addFromTemplate(formularioId));
+    // TODO: Get the id of the user that is logged in
+    const idUsuario = 1;
+    const formularioCriado = await firstValueFrom(this.formularioService.addFromTemplate(formularioId, idUsuario));
     // this.formulario = await this.mapFormularioById(formularioCriado.id);
     this.router.navigate(['/formulario', formularioCriado.id]);
     this.refreshFormulario(formularioCriado.id);
@@ -138,16 +139,16 @@ export class FormularioViewComponent {
     }, 3000);
   }
   // -------------------- Funcoes e atributos para o estado de visualizacao --------------------
-  gerarDiagnosticoLLM() {
-    const textarea = document.getElementById("diagnosticoLLM") as HTMLTextAreaElement;
+  gerarFeedbackLLM() {
+    const textarea = document.getElementById("feedbackLLM") as HTMLTextAreaElement;
     textarea.value = "Gerando diagnóstico..."; 
-    this.formularioService.gerarDiagnosticoLLM(this.formulario.id).subscribe(() => {
+    this.formularioService.gerarFeedbackLLM(this.formulario.id).subscribe(() => {
       // Aguarda o refresh do prontuário antes de iniciar a animação
       this.refreshFormularioAsync().subscribe(() => {
-        const text = this.formulario.diagnosticoLLM;
+        const text = this.formulario.feedbackLLM;
         
         let index = 0;
-        const textarea = document.getElementById("diagnosticoLLM") as HTMLTextAreaElement;
+        const textarea = document.getElementById("feedbackLLM") as HTMLTextAreaElement;
         textarea.value = "";; // Limpa o conteúdo exibido para começar a animação
 
         function type() {
@@ -165,11 +166,11 @@ export class FormularioViewComponent {
     });
   }
 
-  gerarDiagnosticoPreCadastrado() {
-    this.formularioService.gerarDiagnostico(this.formulario.id).subscribe((diagnostico) => {
-      const textarea = document.getElementById("diagnosticoPreCadastrado") as HTMLTextAreaElement;
-      textarea.value = diagnostico.descricao;
-      this.displayedDiagnosticoText = diagnostico.descricao;
+  gerarFeedbackPreCadastrado() {
+    this.formularioService.gerarFeedback(this.formulario.id).subscribe((feedback) => {
+      const textarea = document.getElementById("feedbackPreCadastrado") as HTMLTextAreaElement;
+      textarea.value = feedback.descricao;
+      this.displayedFeedbackText = feedback.descricao;
     });
   }
     
