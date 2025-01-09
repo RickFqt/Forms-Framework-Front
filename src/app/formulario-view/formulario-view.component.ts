@@ -399,12 +399,25 @@ export class FormularioViewComponent {
 
     Promise.all(salvarRequisicoes).then(() => {
       // this.refreshFormulario();
-      console.log('Respostas salvas!');
-      this.mensagemSucesso = 'Respostas salvas com sucesso!';
-      this.mostrarPopUp = true;
+      this.finalizarRespostas();
+    });
+  }
 
-      this.changeFormularioState('visualizacao');
-
+  finalizarRespostas() {
+    this.formularioService.finalizarRespostas(this.formulario.id).subscribe({
+      next: () => {
+        this.refreshFormulario();
+        console.log('Respostas salvas!');
+        this.mensagemSucesso = 'Respostas finalizadas com sucesso!';
+        this.mostrarPopUp = true;
+        this.changeFormularioState('visualizacao');
+      },
+      error: (error) => {
+        console.error('Erro ao finalizar as respostas: ', error.message);
+        this.mensagemSucesso = 'Erro ao finalizar as respostas: ' + error.message;
+        this.ehMensagemErro = true;
+        this.mostrarPopUp = true;
+      }
     });
   }
 

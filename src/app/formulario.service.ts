@@ -83,4 +83,12 @@ export class FormularioService {
     return this.http.get<FormularioComplete>(`/api/formulario/${idFormulario}/informacoesArquivo`);
   }
   
+  finalizarRespostas(idFormulario: number): Observable<Formulario> {
+    return this.http.patch<Formulario>(`/api/formulario/${idFormulario}/finalizarRespostas`, null).pipe(
+      catchError((error) => {
+        const mensagemErro = error.error?.message || 'Erro ao finalizar respostas';
+        return throwError(() => new Error(mensagemErro));
+      })
+    );
+  }
 }
