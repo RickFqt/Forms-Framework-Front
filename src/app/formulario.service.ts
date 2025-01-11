@@ -91,4 +91,13 @@ export class FormularioService {
       })
     );
   }
+
+  instanciarFormulario(idFormulario: number, idUsuario: number): Observable<Formulario> {
+    return this.http.post<Formulario>(`/api/formulario/${idFormulario}/instanciarFormulario/${idUsuario}`, null).pipe(
+      catchError((error) => {
+        const mensagemErro = error.error?.message || 'Erro ao instanciar formulário';
+        return throwError(() => new Error(mensagemErro));
+      })
+    );
+  }
 }

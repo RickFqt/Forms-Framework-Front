@@ -53,6 +53,9 @@ export class FormularioViewComponent {
     this.changeFormularioState('visualizacao');
     this.refreshFormularioAsync().subscribe(() => {
       this.displayedText = this.formulario.feedbackLLM || "";
+      this.ehInstancia = this.formulario.formularioPaiId !== null;
+      console.log('Instância:', this.formulario.formularioPaiId);
+
     });
   }
 
@@ -378,7 +381,7 @@ export class FormularioViewComponent {
       },
       error: (error) => {
       console.error('Erro ao finalizar o prontuário: ', error.message);
-      this.mensagemSucesso = 'Erro ao finalizar o prontuário: ' + error.message;
+      this.mensagemSucesso = error.message;
       this.ehMensagemErro = true;
       this.mostrarPopUp = true;
       }
@@ -389,6 +392,7 @@ export class FormularioViewComponent {
 
   // -------------------- Funcoes e atributos para o estado de respondendo --------------------
   @ViewChildren(SectionComponent) secaoComponents!: QueryList<SectionComponent>;
+  ehInstancia: boolean = false;
   // @Output() salvarRespostasDissertativas = new EventEmitter();
 
   salvarRespostasDissertativas() {
@@ -414,7 +418,7 @@ export class FormularioViewComponent {
       },
       error: (error) => {
         console.error('Erro ao finalizar as respostas: ', error.message);
-        this.mensagemSucesso = 'Erro ao finalizar as respostas: ' + error.message;
+        this.mensagemSucesso = error.message;
         this.ehMensagemErro = true;
         this.mostrarPopUp = true;
       }
@@ -434,6 +438,32 @@ export class FormularioViewComponent {
         );
       }
     );
+  }
+
+  instanciarFormulario() {
+    const formularioId = this.formulario.id;
+
+    // TODO: Get the id of the user that is logged in
+    const idUsuario = 1;
+    
+    this.formularioService.instanciarFormulario(formularioId, idUsuario).subscribe({
+      next: (formulario) => {
+        this.router.navigate(['/formulario', formulario.id]);
+        this.refreshFormulario(formulario.id);
+        this.changeFormularioState('respondendo');
+        this.ehInstancia = true;
+        console.log('Formulário instanciado!');
+        console.log(formulario);
+        this.mensagemSucesso = 'Formulário instanciado com sucesso!';
+        this.mostrarPopUp = true;
+      },
+      error: (error) => {
+        console.error('Erro ao instanciar o formulário:', error);
+        this.mensagemSucesso = error.message;
+        this.ehMensagemErro = true;
+        this.mostrarPopUp = true;
+      }
+    });
   }
   
 
