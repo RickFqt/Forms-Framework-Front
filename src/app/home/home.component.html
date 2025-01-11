@@ -1,13 +1,28 @@
-<section>
-    <form>
-        <input type="text" placeholder="Filter by city" #filter/>
-        <button class="primary" type="button" (click)="filterResults(filter.value)" >Search</button>
-    </form>
-</section>
+<div class="home-container">
+    <h1>Seus Prontuários</h1>
+    <div *ngIf = "formularioTemplateList.length !== 0">
+      
+      <table class="formularios-table">
+          <thead>
+              <tr>
+                  <th>Nome</th>
+                  <th>Ações</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let formulario of formularioTemplateList">
+                    <td>
+                        {{ formulario.nome }}
+                    </td>
+                    <td>
+                        <button (click)="visualizarFormulario(formulario.id)">Visualizar</button>
+                        <button >Exibir respostas</button>
+                        <button (click)="deletarFormulario(formulario.id)">Deletar</button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
 
-<section class="results">
-    <app-formulario-item
-        *ngFor="let formulario of formularioList"
-        [formulario]="formulario"
-    ></app-formulario-item>
-</section>
+    <button (click)="criarFormulario()">Criar Prontuário</button>
+  </div>
