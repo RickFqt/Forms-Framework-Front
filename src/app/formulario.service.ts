@@ -79,5 +79,25 @@ export class FormularioService {
     );
   }
 
+  getInformacoesArquivo(idFormulario: number): Observable<FormularioComplete> {
+    return this.http.get<FormularioComplete>(`/api/formulario/${idFormulario}/informacoesArquivo`);
+  }
+  
+  finalizarRespostas(idFormulario: number): Observable<Formulario> {
+    return this.http.patch<Formulario>(`/api/formulario/${idFormulario}/finalizarRespostas`, null).pipe(
+      catchError((error) => {
+        const mensagemErro = error.error?.message || 'Erro ao finalizar respostas';
+        return throwError(() => new Error(mensagemErro));
+      })
+    );
+  }
 
+  instanciarFormulario(idFormulario: number, idUsuario: number): Observable<Formulario> {
+    return this.http.post<Formulario>(`/api/formulario/${idFormulario}/instanciarFormulario/${idUsuario}`, null).pipe(
+      catchError((error) => {
+        const mensagemErro = error.error?.message || 'Erro ao instanciar formulário';
+        return throwError(() => new Error(mensagemErro));
+      })
+    );
+  }
 }

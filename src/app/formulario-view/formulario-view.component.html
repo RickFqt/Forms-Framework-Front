@@ -27,10 +27,10 @@
       <span>
         <img *ngIf="formulario.ehTemplate" src="plus_sign.svg" alt="Criar formulario a partir de template" class="top-right-buttons plus-button"
         (click)="makeFormularioFromTemplate()">
-        <img src="edit_icon.svg" alt="Editar prontuário" class="top-right-buttons edit-button"
+        <img *ngIf="!ehInstancia" src="edit_icon.svg" alt="Editar prontuário" class="top-right-buttons edit-button"
         (click)="changeFormularioState('editando')">
-        <img *ngIf="!formulario.ehTemplate" src="responder_icon.svg" alt="Responder formulario" class="top-right-buttons answer-button"
-        (click)="changeFormularioState('respondendo')">
+        <img src="responder_icon.svg" alt="Responder formulario" class="top-right-buttons answer-button"
+        (click)= "ehInstancia ? changeFormularioState('respondendo') : instanciarFormulario()">
         <img src="eye_icon.svg" alt="Visualizar formulario" class="top-right-buttons plus-button"
         (click)="changeFormularioState('visualizacao')">
         <img src="copy_icon.svg" alt="Duplicar formulario" class="top-right-buttons copy-button"
