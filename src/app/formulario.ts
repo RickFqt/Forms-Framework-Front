@@ -30,18 +30,18 @@ export class FormularioData implements Formulario {
     secoes: any[];
 
     constructor(
-        id: number,
-        nome: string,
-        descricao: string,
-        finalizado: boolean,
-        respondido: boolean,
-        ehPublico: boolean,
-        ehTemplate: boolean,
-        usuarioId: number,
-        secoesIds: number[],
+        id: number = 0,
+        nome: string = '',
+        descricao: string = '',
+        finalizado: boolean = false,
+        respondido: boolean = false,
+        ehPublico: boolean = false,
+        ehTemplate: boolean = false,
+        usuarioId: number = 0,
+        secoesIds: number[] = [],
         secoes: any[] = [],
-        instanciasFormularioIds: number[],
-        formularioPaiId: number
+        instanciasFormularioIds: number[] = [],
+        formularioPaiId: number = 0
     ) {
         this.id = id;
         this.nome = nome;

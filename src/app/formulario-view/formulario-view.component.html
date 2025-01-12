@@ -25,15 +25,15 @@
     <div class="header">
       <h1 class="title">{{ formulario.nome }} <span *ngIf="formulario.ehTemplate">&#64;Template</span></h1>
       <span>
-        <img *ngIf="formulario.ehTemplate" src="plus_sign.svg" alt="Criar formulario a partir de template" class="top-right-buttons plus-button"
-        (click)="makeFormularioFromTemplate()">
+        <!-- <img *ngIf="formulario.ehTemplate" src="plus_sign.svg" alt="Criar formulario a partir de template" class="top-right-buttons plus-button"
+        (click)="makeFormularioFromTemplate()"> -->
         <img *ngIf="!ehInstancia" src="edit_icon.svg" alt="Editar prontuário" class="top-right-buttons edit-button"
         (click)="changeFormularioState('editando')">
         <img src="responder_icon.svg" alt="Responder formulario" class="top-right-buttons answer-button"
         (click)= "ehInstancia ? changeFormularioState('respondendo') : instanciarFormulario()">
         <img src="eye_icon.svg" alt="Visualizar formulario" class="top-right-buttons plus-button"
         (click)="changeFormularioState('visualizacao')">
-        <img src="copy_icon.svg" alt="Duplicar formulario" class="top-right-buttons copy-button"
+        <img *ngIf="!ehInstancia" src="copy_icon.svg" alt="Duplicar formulario" class="top-right-buttons copy-button"
         (click)="makeFormularioCopy()">
         <img src="pdf_icon.svg" alt="Exportar para PDF" class="top-right-buttons pdf-button"
         (click)="generatePDF()">
@@ -67,7 +67,7 @@
       <hr class="section-separator">
     </div>
 
-    <div *ngIf="estadoFormulario === 'visualizacao'"  class="sections">
+    <div *ngIf="estadoFormulario === 'visualizacao' && formulario.respondido"  class="sections">
       <div class="llm-header">
         <h2 class="llm-title">Diagnóstico Pré-Cadastrado</h2>
         <img
@@ -86,7 +86,7 @@
                 ></textarea>
     </div>
     
-    <div *ngIf="estadoFormulario === 'visualizacao'"  class="sections">
+    <div *ngIf="estadoFormulario === 'visualizacao' && formulario.respondido"  class="sections">
       <div class="llm-header">
         <h2 class="llm-title">Diagnóstico de IA</h2>
         <img
