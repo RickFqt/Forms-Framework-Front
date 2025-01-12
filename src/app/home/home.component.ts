@@ -80,7 +80,7 @@ export class HomeComponent {
   criarFormulario() {
     const formulario : FormularioData = new FormularioData();
     formulario.nome = 'Novo Prontuário';
-    formulario.descricao = 'Descrição do novo prontuário';
+    formulario.descricao = 'Descrição do novo Prontuário';
     formulario.ehTemplate = true;
     formulario.ehPublico = false;
 

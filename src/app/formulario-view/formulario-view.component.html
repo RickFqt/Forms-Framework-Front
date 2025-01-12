@@ -23,7 +23,29 @@
     </div>
 
     <div class="header">
-      <h1 class="title">{{ formulario.nome }} <span *ngIf="formulario.ehTemplate">&#64;Template</span></h1>
+      <h1 *ngIf="estadoFormulario !== 'editando'; else TituloEditandoMode" class="title">
+        {{ formulario.nome }} 
+        <span *ngIf="formulario.ehTemplate">&#64;Template</span>
+      </h1>
+      <ng-template #TituloEditandoMode>
+        <span *ngIf="tituloEditando; else displayTituloMode">
+          <input type="text" [(ngModel)]="tituloAtualEditando" />
+          <button (click)="salvarEdicaoTitulo()">Salvar</button>
+          <button (click)="cancelarEdicaoTitulo()">Cancelar</button>
+        </span>
+
+        <ng-template #displayTituloMode>
+          <h1 class = "title">
+            {{ formulario.nome }} 
+            <span *ngIf="formulario.ehTemplate">&#64;Template</span>
+            <span> <button (click)="mostrarBotaoSubitemTitulo = !mostrarBotaoSubitemTitulo">+</button>
+              <span *ngIf="mostrarBotaoSubitemTitulo">
+                <button (click) = "editarTitulo()">Editar</button>
+              </span>
+            </span>
+          </h1>
+        </ng-template>
+      </ng-template>
       <span>
         <!-- <img *ngIf="formulario.ehTemplate" src="plus_sign.svg" alt="Criar formulario a partir de template" class="top-right-buttons plus-button"
         (click)="makeFormularioFromTemplate()"> -->
