@@ -65,7 +65,7 @@ export class HomeComponent {
       this.formularioList = data;
       this.filteredFormularioList = data;
       this.formularioTemplateList = data;
-      this.formularioTemplateList.filter((formulario) => formulario?.formularioPaiId === null);
+      this.formularioTemplateList = this.formularioTemplateList.filter((formulario) => formulario?.formularioPaiId === null);
       console.log(this.formularioTemplateList);
     });
   }
