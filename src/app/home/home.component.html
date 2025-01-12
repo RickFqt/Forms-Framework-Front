@@ -6,20 +6,40 @@
           <thead>
               <tr>
                   <th>Nome</th>
+                  <th>Nº Respostas</th>
                   <th>Ações</th>
                 </tr>
             </thead>
-            <tbody>
-                <tr *ngFor="let formulario of formularioTemplateList">
-                    <td>
-                        {{ formulario.nome }}
-                    </td>
-                    <td>
-                        <button (click)="visualizarFormulario(formulario.id)">Visualizar</button>
-                        <button >Exibir respostas</button>
-                        <button (click)="deletarFormulario(formulario.id)">Deletar</button>
-                    </td>
-                </tr>
+            <tbody *ngFor="let formulario of formularioTemplateList">
+                <!-- <div > -->
+
+                    <tr >
+                        <td>
+                            {{ formulario.nome }}
+                        </td>
+                        <td style="text-align: center;">
+                            {{ formulario.instanciasFormularioIds.length }}
+                        </td>
+                        <td>
+                            <button (click)="visualizarFormulario(formulario.id)">Visualizar</button>
+                            <button (click)="exibirInstanciasFormulario(formulario.id)">Exibir respostas</button>
+                            <button (click)="deletarFormulario(formulario.id)">Deletar</button>
+                        </td>
+                    </tr>
+                    <tr *ngFor="let instanciaId of formulario.instanciasFormularioIds">
+                        <td *ngIf = "instanciasFormularioVisible.get(formulario.id)">
+                            {{ formularioMap.get(instanciaId)?.nome }}
+                        </td>
+                        <td *ngIf = "instanciasFormularioVisible.get(formulario.id)" style="text-align: center;">
+                            .
+                        </td>
+                        <td *ngIf = "instanciasFormularioVisible.get(formulario.id)">
+                            <button (click)="visualizarFormulario(instanciaId)">Visualizar</button>
+                            <!-- <button (click)="deletarFormulario(instanciaId)">Deletar</button> -->
+                        </td>
+                    </tr>
+                <!-- </div> -->
+
             </tbody>
         </table>
     </div>

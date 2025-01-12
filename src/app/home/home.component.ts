@@ -18,10 +18,10 @@ export class HomeComponent {
   usuarioService: UsuarioService = inject(UsuarioService);
   router: Router = inject(Router);
 
-  formularioList: Formulario[] = [];
+  formularioMap: Map<number, Formulario> = new Map<number, Formulario>();
   formularioTemplateList: Formulario[] = [];
   filteredFormularioList: Formulario[] = [];
-
+  instanciasFormularioVisible: Map<number, boolean> = new Map<number, boolean>();
   ngOnInit() {
     this.carregarFormularios();
   }
@@ -47,33 +47,40 @@ export class HomeComponent {
     // }
   }
 
-  filterResults(text: string) {
-    if(!text) {
-      this.filteredFormularioList = this.formularioList;
-      return;
-    }
+  // filterResults(text: string) {
+  //   if(!text) {
+  //     this.filteredFormularioList = this.formularioList;
+  //     return;
+  //   }
 
-    this.filteredFormularioList = this.formularioList.filter((formulario) => 
-      formulario?.nome.toLowerCase().includes(text.toLowerCase())
-    );
-  }
+  //   this.filteredFormularioList = this.formularioList.filter((formulario) => 
+  //     formulario?.nome.toLowerCase().includes(text.toLowerCase())
+  //   );
+  // }
 
   carregarFormularios() {
     // TODO: Mudar isso para carregar apenas os prontuários do usuário logado
     const usuarioId = 1;
     this.usuarioService.getFormularios(usuarioId).subscribe((data) => {
-      this.formularioList = data;
+
+      for (let formulario of data) {
+        this.formularioMap.set(formulario.id, formulario);
+      }
       this.filteredFormularioList = data;
       this.formularioTemplateList = data;
       this.formularioTemplateList = this.formularioTemplateList.filter((formulario) => formulario?.formularioPaiId === null);
-      console.log(this.formularioTemplateList);
+      for (let formulario of data) {
+        if (!this.instanciasFormularioVisible.has(formulario.id)) {
+          this.instanciasFormularioVisible.set(formulario.id, false);
+        }
+      }
     });
   }
 
   criarFormulario() {
     const formulario : FormularioData = new FormularioData();
-    formulario.nome = 'Novo Formulário';
-    formulario.descricao = 'Descrição do novo formulário';
+    formulario.nome = 'Novo Prontuário';
+    formulario.descricao = 'Descrição do novo prontuário';
     formulario.ehTemplate = true;
     formulario.ehPublico = false;
 
@@ -83,5 +90,9 @@ export class HomeComponent {
     this.usuarioService.createFormulario(1, formulario).subscribe(() => {
       this.carregarFormularios();
     });
+  }
+
+  exibirInstanciasFormulario(idFormulario: number) {
+    this.instanciasFormularioVisible.set(idFormulario, !this.instanciasFormularioVisible.get(idFormulario));
   }
 }
