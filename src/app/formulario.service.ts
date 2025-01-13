@@ -30,6 +30,10 @@ export class FormularioService {
     return this.http.get<FormularioComplete>(`/api/formulario/${id}/complete`, {params});
   }
 
+  update(id: number, formulario: Formulario): Observable<Formulario> {
+    return this.http.put<Formulario>(`/api/formulario/${id}`, formulario);
+  }
+
   addFormulario(nome: string, descricao: string, ): void {
     const formulario = { 
       nome: nome,

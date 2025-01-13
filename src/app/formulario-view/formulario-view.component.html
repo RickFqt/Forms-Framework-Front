@@ -23,7 +23,29 @@
     </div>
 
     <div class="header">
-      <h1 class="title">{{ formulario.nome }} <span *ngIf="formulario.ehTemplate">&#64;Template</span></h1>
+      <h1 *ngIf="estadoFormulario !== 'editando'; else TituloEditandoMode" class="title">
+        {{ formulario.nome }} 
+        <span *ngIf="formulario.ehTemplate">&#64;Template</span>
+      </h1>
+      <ng-template #TituloEditandoMode>
+        <span *ngIf="tituloEditando; else displayTituloMode">
+          <input style="font-size: 50px; font-family: 'Nunito', sans-serif; font-weight: 800;" type="text" [(ngModel)]="tituloAtualEditando" />
+          <button (click)="salvarEdicaoTitulo()">Salvar</button>
+          <button (click)="cancelarEdicaoTitulo()">Cancelar</button>
+        </span>
+
+        <ng-template #displayTituloMode>
+          <h1 class = "title">
+            {{ formulario.nome }} 
+            <span *ngIf="formulario.ehTemplate">&#64;Template</span>
+            <span> <button style="font-size: 50px; font-family: 'Nunito', sans-serif;" (click)="mostrarBotaoSubitemTitulo = !mostrarBotaoSubitemTitulo">+</button>
+              <span *ngIf="mostrarBotaoSubitemTitulo">
+                <button style="font-size: 50px; font-family: 'Nunito', sans-serif;" (click) = "editarTitulo()">Editar</button>
+              </span>
+            </span>
+          </h1>
+        </ng-template>
+      </ng-template>
       <span>
         <!-- <img *ngIf="formulario.ehTemplate" src="plus_sign.svg" alt="Criar formulario a partir de template" class="top-right-buttons plus-button"
         (click)="makeFormularioFromTemplate()"> -->
@@ -46,7 +68,27 @@
     <!-- Título -->
     
     <!-- Descrição -->
-    <p class="description">{{ formulario.descricao }}</p>
+    <p *ngIf="estadoFormulario !== 'editando'; else DescricaoEditandoMode" class="title" class="description">
+      {{ formulario.descricao }}
+    </p>
+    <ng-template #DescricaoEditandoMode>
+      <span *ngIf="descricaoEditando; else displayDescricaoMode">
+        <input style="font-size: 25px; font-family: 'Nunito', sans-serif;" type="text" [(ngModel)]="descricaoAtualEditando" />
+        <button (click)="salvarEdicaoDescricao()">Salvar</button>
+        <button (click)="cancelarEdicaoDescricao()">Cancelar</button>
+      </span>
+
+      <ng-template #displayDescricaoMode>
+        <p class = "description">
+          {{ formulario.descricao }} 
+          <span> <button style="font-size: 25px; font-family: 'Nunito', sans-serif;" (click)="mostrarBotaoSubitemDescricao = !mostrarBotaoSubitemDescricao">+</button>
+            <span *ngIf="mostrarBotaoSubitemDescricao">
+              <button style="font-size: 25px; font-family: 'Nunito', sans-serif;" (click) = "editarDescricao()">Editar</button>
+            </span>
+          </span>
+        </p>
+      </ng-template>
+    </ng-template>
 
     <hr class="section-separator">
     

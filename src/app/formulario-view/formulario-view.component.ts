@@ -465,7 +465,72 @@ export class FormularioViewComponent {
       }
     });
   }
+
+  // -------------------------------------------------------------------------------------
+
+  // -------------------- Funcoes e atributos para o estado de respondendo --------------------
+  tituloEditando: boolean = false;
+  tituloAtualEditando: string = '';
+  mostrarBotaoSubitemTitulo: boolean = false;
+  descricaoEditando: boolean = false;
+  descricaoAtualEditando: string = '';
+  mostrarBotaoSubitemDescricao: boolean = false;
   
+
+  editarTitulo() {
+    this.tituloEditando = true;
+    this.tituloAtualEditando = this.formulario.nome;
+  }
+
+  salvarEdicaoTitulo() {
+    const formulario : FormularioData = new FormularioData();
+    formulario.nome = this.tituloAtualEditando;
+    formulario.descricao = this.formulario.descricao;
+    formulario.ehTemplate = this.formulario.ehTemplate;
+    formulario.ehPublico = this.formulario.ehPublico;
+
+
+    this.formularioService.update(this.formulario.id, formulario).subscribe(() => {
+      this.refreshFormulario();
+      this.tituloEditando = false;
+      console.log('Título atualizado!');
+      this.mostrarBotaoSubitemTitulo = false;
+    });
+  }
+
+  cancelarEdicaoTitulo() {
+    this.tituloEditando = false;
+    this.tituloAtualEditando = '';
+    this.mostrarBotaoSubitemTitulo = false;
+  }
+
+  cancelarEdicaoDescricao() {
+    this.descricaoEditando = false;
+    this.descricaoAtualEditando = '';
+    this.mostrarBotaoSubitemDescricao = false;
+  }
+
+  editarDescricao() {
+    this.descricaoEditando = true;
+    this.descricaoAtualEditando = this.formulario.descricao;
+  }
+
+  salvarEdicaoDescricao() {
+    const formulario : FormularioData = new FormularioData();
+    formulario.nome = this.formulario.descricao;
+    formulario.descricao = this.descricaoAtualEditando;
+    formulario.ehTemplate = this.formulario.ehTemplate;
+    formulario.ehPublico = this.formulario.ehPublico;
+
+
+    this.formularioService.update(this.formulario.id, formulario).subscribe(() => {
+      this.refreshFormulario();
+      this.descricaoEditando = false;
+      console.log('Título atualizado!');
+      this.mostrarBotaoSubitemDescricao = false;
+    });
+  }
+
 
 
 }
