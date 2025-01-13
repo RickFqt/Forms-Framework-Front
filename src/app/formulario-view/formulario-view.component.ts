@@ -448,14 +448,23 @@ export class FormularioViewComponent {
     
     this.formularioService.instanciarFormulario(formularioId, idUsuario).subscribe({
       next: (formulario) => {
-        this.router.navigate(['/formulario', formulario.id]);
-        this.refreshFormulario(formulario.id);
-        this.changeFormularioState('respondendo');
-        this.ehInstancia = true;
-        console.log('Formulário instanciado!');
-        console.log(formulario);
-        this.mensagemSucesso = 'Formulário instanciado com sucesso!';
-        this.mostrarPopUp = true;
+
+        const formularioInstanciado : FormularioData = new FormularioData();
+        formularioInstanciado.nome = formulario.nome + ' - ' + new Date().toLocaleString();
+        formularioInstanciado.descricao = formulario.descricao;
+        formularioInstanciado.ehTemplate = formulario.ehTemplate;
+        formularioInstanciado.ehPublico = formulario.ehPublico;
+
+        this.formularioService.update(formulario.id, formularioInstanciado).subscribe(() => {
+          this.router.navigate(['/formulario', formulario.id]);
+          this.refreshFormulario(formulario.id);
+          this.changeFormularioState('respondendo');
+          this.ehInstancia = true;
+          console.log('Formulário instanciado!');
+          console.log(formulario);
+          this.mensagemSucesso = 'Formulário instanciado com sucesso!';
+          this.mostrarPopUp = true;
+        });
       },
       error: (error) => {
         console.error('Erro ao instanciar o formulário:', error);
