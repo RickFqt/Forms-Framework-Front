@@ -526,7 +526,7 @@ export class FormularioViewComponent {
 
   salvarEdicaoDescricao() {
     const formulario : FormularioData = new FormularioData();
-    formulario.nome = this.formulario.descricao;
+    formulario.nome = this.formulario.nome;
     formulario.descricao = this.descricaoAtualEditando;
     formulario.ehTemplate = this.formulario.ehTemplate;
     formulario.ehPublico = this.formulario.ehPublico;
