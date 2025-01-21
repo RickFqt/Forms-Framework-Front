@@ -43,6 +43,7 @@ export class FormularioViewComponent {
 
   formulario : FormularioComplete = {} as FormularioComplete;
   displayedText: string = '';
+  displayedTextEstatisticas: string = '';
   displayedFeedbackText: string = '';
 
   mensagemSucesso: string | null = null;
@@ -174,6 +175,33 @@ export class FormularioViewComponent {
       const textarea = document.getElementById("feedbackPreCadastrado") as HTMLTextAreaElement;
       textarea.value = feedback.descricao;
       this.displayedFeedbackText = feedback.descricao;
+    });
+  }
+
+  gerarEstatisticasLLM() {
+    const textarea = document.getElementById("estatisticasLLM") as HTMLTextAreaElement;
+    textarea.value = "Gerando estatísticas..."; 
+    this.formularioService.gerarEstatisticasLLM(this.formulario.id).subscribe(mapa => {
+      // Aguarda o refresh do prontuário antes de iniciar a animação
+      this.refreshFormularioAsync().subscribe(() => {
+        const text = mapa.content;
+        
+        let index = 0;
+        const textarea = document.getElementById("estatisticasLLM") as HTMLTextAreaElement;
+        textarea.value = "";; // Limpa o conteúdo exibido para começar a animação
+
+        function type() {
+          if (index < text.length) {
+            textarea.value += text.charAt(index);
+            textarea.scrollTop = textarea.scrollHeight;
+            index++;
+            setTimeout(type, 10); // Ajuste a velocidade conforme necessário
+          }
+        }
+
+        // Inicia a animação de digitação
+        type();
+      });
     });
   }
     

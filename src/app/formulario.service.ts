@@ -70,6 +70,10 @@ export class FormularioService {
     return this.http.get<{conteudo: string}>(`/api/formulario/${idFormulario}/feedbackLLM`);
   }
 
+  gerarEstatisticasLLM(idFormulario: number): Observable<{content: string}> {
+    return this.http.get<{content: string}>(`/api/formulario/${idFormulario}/estatisticasLLM`);
+  }
+
   gerarFeedback(idFormulario: number): Observable<Feedback> {
     return this.http.get<Feedback>(`/api/formulario/${idFormulario}/feedback`);
   }
