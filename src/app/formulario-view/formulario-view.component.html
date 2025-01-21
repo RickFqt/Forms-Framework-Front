@@ -147,6 +147,25 @@
                 ></textarea>
     </div>
 
+    <div *ngIf="estadoFormulario === 'visualizacao' && !ehInstancia"  class="sections">
+      <div class="llm-header">
+        <h2 class="llm-title">Estatísticas de respostas(feitas por IA)</h2>
+        <img
+          class="llm-button"
+          src="llm_button.svg"
+          alt="Gerar Estatísticas feitas por IA"
+          (click)="gerarEstatisticasLLM()"
+        />
+      </div>
+      <textarea 
+                id="estatisticasLLM"
+                class="long-answer"
+                [value]="displayedTextEstatisticas"
+                [disabled]="true"
+                placeholder="Gere seu diagnóstico com IA"
+                ></textarea>
+    </div>
+
     <!-- Container para adicionar novas seções -->
     <div *ngIf="estadoFormulario === 'editando'" class="add-section-container">
       <input type="text" placeholder="Título da nova seção" [(ngModel)]="novaSecaoTitulo" class="new-section-input" />
