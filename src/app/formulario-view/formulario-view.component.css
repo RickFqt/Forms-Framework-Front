@@ -19,7 +19,7 @@
   height: 100vh; /* Sempre terá a altura da tela */
   width: 5vw; /* 6.7% da largura da tela */
   min-width: 96px; /* Largura mínima de 96px */
-  background-color: #85CEC3; /* Cor de fundo do bloco lateral */
+  background-color: #a85fcf; /* Cor de fundo do bloco lateral */
   display: flex;
   flex-direction: column;
   justify-content: space-between; /* Espaço entre logo e botão */
