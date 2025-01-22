@@ -72,6 +72,10 @@
   font-size: 25px;
 }
 
+.add-section-container {
+  margin-left: 42px;
+}
+
 /* Separador das seções */
 .section-separator {
   margin: 20px 0;
@@ -182,6 +186,7 @@
 }
 
 .llm-header {
+  margin-top: 42px;
   display: flex;
   justify-content: space-between;
   align-items: center;

@@ -127,25 +127,6 @@
                 placeholder="Recupere seu diagnóstico pré-cadastrado"
                 ></textarea>
     </div>
-    
-    <div *ngIf="estadoFormulario === 'visualizacao' && formulario.respondido"  class="sections">
-      <div class="llm-header">
-        <h2 class="llm-title">Diagnóstico de IA</h2>
-        <img
-          class="llm-button"
-          src="llm_button.svg"
-          alt="Gerar Diagnóstico por IA"
-          (click)="gerarFeedbackLLM()"
-        />
-      </div>
-      <textarea 
-                id="feedbackLLM"
-                class="long-answer"
-                [value]="displayedText"
-                [disabled]="true"
-                placeholder="Gere seu diagnóstico com IA"
-                ></textarea>
-    </div>
 
     <div *ngIf="estadoFormulario === 'visualizacao' && !ehInstancia"  class="sections">
       <div class="llm-header">
@@ -162,7 +143,7 @@
                 class="long-answer"
                 [value]="displayedTextEstatisticas"
                 [disabled]="true"
-                placeholder="Gere seu diagnóstico com IA"
+                placeholder="Veja as estatísticas das respostas coletadas desse edital"
                 ></textarea>
     </div>
 
@@ -170,6 +151,25 @@
     <div *ngIf="estadoFormulario === 'editando'" class="add-section-container">
       <input type="text" placeholder="Título da nova seção" [(ngModel)]="novaSecaoTitulo" class="new-section-input" />
       <button (click)="adicionarSecao()" class="add-section-button">Adicionar Seção</button>
+    </div>
+
+    <div *ngIf="estadoFormulario === 'editando'"  class="sections">
+      <div class="llm-header">
+        <h2 class="llm-title">Sugestão de IA</h2>
+        <img
+          class="llm-button"
+          src="llm_button.svg"
+          alt="Gerar Sugestão feita por IA"
+          (click)="gerarFeedbackLLM()"
+        />
+      </div>
+      <textarea 
+                id="feedbackLLM"
+                class="long-answer"
+                [value]="displayedText"
+                [disabled]="true"
+                placeholder="A partir do título e descrição do seu edital, obtenha uma sugestão de estrutura para o mesmo"
+                ></textarea>
     </div>
 
     <!-- Botão de salvar resposta-->

@@ -145,7 +145,7 @@ export class FormularioViewComponent {
   // -------------------- Funcoes e atributos para o estado de visualizacao --------------------
   gerarFeedbackLLM() {
     const textarea = document.getElementById("feedbackLLM") as HTMLTextAreaElement;
-    textarea.value = "Gerando diagnóstico..."; 
+    textarea.value = "Gerando sugestão..."; 
     this.formularioService.gerarFeedbackLLM(this.formulario.id).subscribe(() => {
       // Aguarda o refresh do prontuário antes de iniciar a animação
       this.refreshFormularioAsync().subscribe(() => {
