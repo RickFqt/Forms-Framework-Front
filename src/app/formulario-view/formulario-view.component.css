@@ -185,6 +185,7 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
+  margin-top: 42px;
 }
 
 .llm-title {
@@ -284,7 +285,7 @@
 }
 
 .save-btn-primary {
-  background-color: #85CEC3;
+  background-color: #a85fcf;
 }
 
 .campoFeedbackPreCadastrado {

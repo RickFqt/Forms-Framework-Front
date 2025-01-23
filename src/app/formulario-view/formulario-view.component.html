@@ -57,7 +57,7 @@
         (click)="changeFormularioState('visualizacao')">
         <img *ngIf="!ehInstancia" src="copy_icon.svg" alt="Duplicar formulario" class="top-right-buttons copy-button"
         (click)="makeFormularioCopy()">
-        <img src="pdf_icon.svg" alt="Exportar para PDF" class="top-right-buttons pdf-button"
+        <img *ngIf="ehInstancia && formulario.respondido" src="pdf_icon.svg" alt="Exportar para PDF" class="top-right-buttons pdf-button"
         (click)="generatePDF()">
         <!-- <button (click)="generatePDF()">Exportar para PDF</button> -->
       </span>
@@ -109,7 +109,7 @@
       <hr class="section-separator">
     </div>
 
-    <div *ngIf="estadoFormulario === 'visualizacao' && formulario.respondido"  class="sections">
+    <!-- <div *ngIf="estadoFormulario === 'visualizacao' && formulario.respondido"  class="sections">
       <div class="llm-header">
         <h2 class="llm-title">Diagnóstico Pré-Cadastrado</h2>
         <img
@@ -126,15 +126,15 @@
                 [disabled]="true"
                 placeholder="Recupere seu diagnóstico pré-cadastrado"
                 ></textarea>
-    </div>
+    </div> -->
     
-    <div *ngIf="estadoFormulario === 'visualizacao' && formulario.respondido"  class="sections">
+    <div *ngIf="estadoFormulario === 'respondendo'"  class="sections">
       <div class="llm-header">
-        <h2 class="llm-title">Diagnóstico de IA</h2>
+        <h2 class="llm-title">Sugestão de atrações</h2>
         <img
           class="llm-button"
           src="llm_button.svg"
-          alt="Gerar Diagnóstico por IA"
+          alt="Gerar Sugestão de Atrações baseado em suas escolhas (feito por IA)"
           (click)="gerarFeedbackLLM()"
         />
       </div>
@@ -143,7 +143,7 @@
                 class="long-answer"
                 [value]="displayedText"
                 [disabled]="true"
-                placeholder="Gere seu diagnóstico com IA"
+                placeholder="Gerar Sugestão de Atrações baseado em suas escolhas (feito por IA)"
                 ></textarea>
     </div>
 
@@ -162,7 +162,7 @@
                 class="long-answer"
                 [value]="displayedTextEstatisticas"
                 [disabled]="true"
-                placeholder="Gere seu diagnóstico com IA"
+                placeholder="Gerar Estatísticas feitas por IA"
                 ></textarea>
     </div>
 
