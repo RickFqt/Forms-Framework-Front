@@ -57,8 +57,8 @@
         (click)="changeFormularioState('visualizacao')">
         <img *ngIf="!ehInstancia" src="copy_icon.svg" alt="Duplicar formulario" class="top-right-buttons copy-button"
         (click)="makeFormularioCopy()">
-        <img src="pdf_icon.svg" alt="Exportar para PDF" class="top-right-buttons pdf-button"
-        (click)="generatePDF()">
+        <!-- <img src="pdf_icon.svg" alt="Exportar para PDF" class="top-right-buttons pdf-button"
+        (click)="generatePDF()"> -->
         <!-- <button (click)="generatePDF()">Exportar para PDF</button> -->
       </span>
       <!-- <button class="top-right-button">Clique aqui</button> -->
@@ -109,7 +109,7 @@
       <hr class="section-separator">
     </div>
 
-    <div *ngIf="estadoFormulario === 'visualizacao' && formulario.respondido"  class="sections">
+    <!-- <div *ngIf="estadoFormulario === 'visualizacao' && formulario.respondido"  class="sections">
       <div class="llm-header">
         <h2 class="llm-title">Diagnóstico Pré-Cadastrado</h2>
         <img
@@ -126,7 +126,7 @@
                 [disabled]="true"
                 placeholder="Recupere seu diagnóstico pré-cadastrado"
                 ></textarea>
-    </div>
+    </div> -->
 
     <div *ngIf="estadoFormulario === 'visualizacao' && !ehInstancia"  class="sections">
       <div class="llm-header">

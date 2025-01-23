@@ -458,12 +458,18 @@ export class FormularioViewComponent {
     this.formularioService.addResposta(this.formulario.id, event.quesitoId, event.resposta).subscribe(
       (resposta) => {
         
-        this.respostaService.addOpcaoMarcada(resposta.id, event.opcaoId).subscribe(
-          (resposta) => {
-            this.refreshFormulario();
-            console.log('Resposta salva!');
-          }
-        );
+        if(event.opcaoId != -1){
+          this.respostaService.addOpcaoMarcada(resposta.id, event.opcaoId).subscribe(
+            (resposta) => {
+              this.refreshFormulario();
+              console.log('Resposta salva!');
+            }
+          );
+        }
+        else {
+          this.refreshFormulario();
+          console.log('Resposta salva!');
+        }
       }
     );
   }

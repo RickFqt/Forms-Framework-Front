@@ -26,6 +26,7 @@
           <option value="DISSERTATIVA_LONGA">Dissertativa Longa</option>
           <option value="OBJETIVA_SIMPLES">Objetiva Simples</option>
           <option value="OBJETIVA_MULTIPLA">Objetiva Múltipla</option>
+          <option value="ARQUIVO">Arquivo</option>
         </select>
       </div>
     </ng-template>
@@ -63,6 +64,11 @@
       </div>
 
       <!-- Objetiva múltipla -->
+      <div *ngIf="quesito.tipoResposta === 'ARQUIVO'">
+        <input type="file" (change)="onFileSelected($event)" accept="application/pdf" />
+      </div>
+
+      <!-- Arquivo -->
       <div *ngIf="quesito.tipoResposta === 'OBJETIVA_MULTIPLA'" class="choices-container">
         <div *ngFor="let opcao of quesito.opcoes" class="choice">
           <input 
@@ -96,7 +102,12 @@
       </div>
 
       <!-- Objetiva múltipla -->
-      <div *ngIf="quesito.tipoResposta === 'OBJETIVA_MULTIPLA'" class="choices-container">
+      <div *ngIf="quesito.tipoResposta === 'ARQUIVO'" class="choices-container">
+        {{ resposta.conteudo[0] ? 'Arquivo Salvo!' : 'Nenhum Arquivo Salvo' }}
+      </div>
+
+      <!-- Arquivo -->
+      <div *ngIf="quesito.tipoResposta === 'ARQUIVO'">
         <span *ngFor="let option of quesito.opcoes">
           <input type="checkbox" [checked]="resposta.opcoesMarcadasIds.includes(option.id)" disabled>
           {{ option.textoAlternativa }}
@@ -142,6 +153,10 @@
           </ng-template>
         </span>
         <button (click)="adicionarOpcao()">Adicionar Opção</button>
+      </div>
+
+      <div *ngIf="quesito.tipoResposta === 'ARQUIVO'">
+        <button>Insira seu arquivo</button>
       </div>
     </div>
 

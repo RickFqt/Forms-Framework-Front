@@ -85,6 +85,7 @@ export class QuesitoComponent implements OnInit, OnDestroy {
   @Output() criarResposta = new EventEmitter<{quesitoId:number, resposta:RespostaCreate, opcaoId:number}>();
   respostaDissertativa: string = '';
   private inputChanged: Subject<string> = new Subject();
+  base64String: string | undefined;
 
   async isQuesitoHabilitado(quesitoId: number) {
     const habilitado = await firstValueFrom(this.quesitoService.estaHabilitado(quesitoId));
@@ -175,6 +176,45 @@ export class QuesitoComponent implements OnInit, OnDestroy {
         return this.formularioService.addResposta(formularioId, this.quesito.id, resposta);
     } else {
         return this.respostaService.update(this.resposta.id, resposta);
+    }
+  }
+
+  onFileSelected(event: Event): void {
+    const input = event.target as HTMLInputElement;
+
+    if (input?.files?.length) {
+      const file = input.files[0];
+      const reader = new FileReader();
+
+      // Quando o arquivo for lido, converte para Base64
+      reader.onload = () => {
+        this.base64String = reader.result as string;
+        console.log('Base64 Encoded PDF:', this.base64String);
+
+        // Aqui você pode enviar o Base64 para o back-end
+        this.salvarRespostaArquivo(this.base64String);
+      };
+
+      reader.readAsDataURL(file); // Lê o arquivo como Base64
+    }
+  }
+
+  salvarRespostaArquivo(base64String: string) {
+    const resposta : RespostaCreate = {
+      conteudo: [base64String],
+      tipoResposta: this.quesito.tipoResposta
+    }
+    console.log('Resposta tipo resposta:', this.quesito.tipoResposta);
+
+    if(this.quesito.resposta === null) {
+      this.criarResposta.emit({quesitoId: this.quesito.id, resposta: resposta, opcaoId: -1});
+    }
+    else {
+      this.respostaService.update(this.resposta.id, resposta).subscribe(
+        (resposta) => {
+          this.respostaAtualizada.emit();
+        }
+      );
     }
   }
 
