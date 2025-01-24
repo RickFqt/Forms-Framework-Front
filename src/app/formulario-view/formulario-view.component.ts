@@ -222,141 +222,77 @@ export class FormularioViewComponent {
     });
   }
 
+  // generatePDF() {
+  //   this.formularioService.getInformacoesArquivo(this.formulario.id).subscribe({
+  //     next: (formulario) => {
+  //       console.log(formulario)
+  //       // Cria uma nova instância de jsPDF
+  //       const doc = new jsPDF('p', 'mm', 'a4');
+  
+  //       // Salva o PDF com o nome do prontuário
+  //       doc.save(`${formulario.nome}.pdf`);
+  //     },
+  //     error: (error) => {
+  //       console.error('Erro ao buscar o prontuário:', error);
+  //       alert('Não foi possível gerar o PDF.');
+  //     },
+  //     complete: () => {
+  //       console.log('Geração do PDF concluída.');
+  //     },
+  //   });
+  // }
   generatePDF() {
     this.formularioService.getInformacoesArquivo(this.formulario.id).subscribe({
-      next: (formulario) => {
-        console.log(formulario)
+      next: (infoIngresso) => {
+        console.log(infoIngresso);
         // Cria uma nova instância de jsPDF
         const doc = new jsPDF('p', 'mm', 'a4');
   
-        // Título
-        doc.setFontSize(20);
+        // Título do PDF
+        doc.setFontSize(22);
         doc.setFont('Nunito', 'bold');
-        doc.text(formulario.nome, 10, 20);
-        // Imprime se é template
-        if (formulario.ehTemplate) {
-          doc.setFontSize(12);
-          doc.text('@Template', 60, 20);
-        }
+        doc.text('Ingresso - Festival Musical', 10, 20);
   
-        // Descrição
+        // Data da compra
         doc.setFontSize(14);
         doc.setFont('Nunito', 'normal');
-        doc.text(formulario.descricao || 'Sem descrição', 10, 30);
+        doc.text(`Data da Compra: ${infoIngresso.dataCompra}`, 10, 40);
   
-        // Seções/Quesitos
-        let yPosition = 40;
-        // Função para imprimir seções e subseções recursivamente
-        const printSubItem = (item: any, depth: number = 0) => {
-          // Ajusta a indentação com base na profundidade
-          const indent = 10 + depth * 10;
-
-          // Título da seção ou quesito
-          doc.setFontSize(16 - depth); // Menor tamanho para subseções mais profundas
+        // Informações do evento
+        doc.text(`Sobre o Evento: ${infoIngresso.sobreEvento}`, 10, 50);
+  
+        // Meia-entrada
+        const meiaEntradaText = infoIngresso.ehMeiaEntrada ? 'Sim' : 'Não';
+        doc.text(`Meia-Entrada: ${meiaEntradaText}`, 10, 60);
+  
+        // Dados pessoais
+        doc.setFontSize(16);
+        doc.setFont('Nunito', 'bold');
+        doc.text('Dados Pessoais:', 10, 80);
+  
+        doc.setFontSize(14);
+        doc.setFont('Nunito', 'normal');
+        doc.text(`Nome: ${infoIngresso.dadosPessoais.nomeTitular}`, 10, 90);
+        doc.text(`CPF: ${infoIngresso.dadosPessoais.cpfTitular}`, 10, 100);
+        doc.text(`Idade: ${infoIngresso.dadosPessoais.idadeTitular}`, 10, 110);
+  
+        // Sugestão gerada por LLM
+        if (infoIngresso.sugestaoLLM) {
+          doc.setFontSize(16);
           doc.setFont('Nunito', 'bold');
-          if(item.tipoDeItem == "secao"){
-            doc.text(`${item.numeracao} ${item.titulo}`, 10, yPosition);
-          }else{
-            doc.text(`${item.numeracao} ${item.enunciado}`, 10, yPosition);
-          }
-          yPosition += 10;
-
-          // Conteúdo do quesito
-          if(item.tipoDeItem == "quesito"){
-            doc.setFontSize(12);
-            doc.setFont('Nunito', 'normal');
-            
-            switch (item.tipoResposta) {
-              case 'DISSERTATIVA_CURTA':
-              case 'DISSERTATIVA_LONGA':
-                // Cria uma caixa de texto com a resposta (se houver)
-                const boxHeight = item.tipoResposta === 'DISSERTATIVA_CURTA' ? 20 : 50;
-                doc.rect(indent, yPosition, 180 - depth * 10, boxHeight);
-                if (item.resposta) {
-                  const respostaText = doc.splitTextToSize(item.resposta.conteudo[0], 180 - depth * 10 - 2);
-                  doc.text(respostaText, indent + 2, yPosition + 5);
-                }
-                yPosition += boxHeight + 10;
-                break;
-
-              case 'OBJETIVA_SIMPLES':
-              case 'OBJETIVA_MULTIPLA':
-                // Mostra as opções lado a lado
-                if (item.opcoes && item.opcoes.length > 0) {
-                  let currentX = indent; // Posição horizontal inicial
-                  const rowHeight = 6; // Altura entre as linhas de opções
-                  const maxWidth = 180; // Largura máxima da página para uma linha de opções
-                  
-                  item.opcoes.forEach((opcao: any, index: number) => {
-                    const isSelected = item.resposta && item.resposta.opcoesMarcadas.some((o: { id: any; }) => o.id === opcao.id) ? 
-                                       item.tipoResposta === 'OBJETIVA_SIMPLES' ? '(X)' : '[X]' 
-                                       :
-                                       item.tipoResposta === 'OBJETIVA_SIMPLES' ? '( )' : '[ ]' ;
-                    const optionText = `${isSelected} ${opcao.textoAlternativa}`;
-                    
-                    const textWidth = doc.getTextWidth(optionText) + 10; // Largura do texto atual + margem
-
-                    // Verifica se há espaço na linha atual, caso contrário, pula para a próxima linha
-                    if (currentX + textWidth > maxWidth) {
-                      currentX = indent; // Reinicia a posição horizontal
-                      yPosition += rowHeight; // Avança para a próxima linha
-                    }
-
-                    // Adiciona o texto na posição atual
-                    doc.text(optionText, currentX, yPosition);
-
-                    // Avança horizontalmente
-                    currentX += textWidth;
-                  });
-                  
-                  // Avança a posição vertical após as opções
-                  yPosition += rowHeight + 4;
-                }
-                break;
-
-              default:
-                doc.text('Tipo de resposta não identificado.', indent, yPosition);
-                yPosition += 10;
-                break;
-            }
-          }
-          
-          // Adiciona nova página se necessário
-          if (yPosition > 270) {
-            doc.addPage();
-            yPosition = 20;
-          }
-
-          // Se a seção tiver subseções, chama a função recursivamente
-          if (item.tipoDeItem == "secao" && item.subItens && item.subItens.length > 0) {
-            item.subItens.forEach((subItem: any) => printSubItem(subItem, depth + 1));
-          }
-          if (item.tipoDeItem == "quesito" && item.subQuesitos && item.subQuesitos.length > 0) {
-            item.subQuesitos.forEach((subItem: any) => printSubItem(subItem, depth + 1));
-          }
-        };
-        formulario.secoes.forEach((secao, index) => {
-          printSubItem(secao);
-
-          // Separador
-          const indent = 10;
-          yPosition += 5;
-          doc.setLineWidth(0.1);
-          doc.line(indent, yPosition, 200, yPosition);
-          
-          // Espaço após a seção principal
-          yPosition += 10;
-          if (yPosition > 270) {
-            doc.addPage();
-            yPosition = 20;
-          }
-        });
+          doc.text('Sugestões Personalizadas:', 10, 130);
   
-        // Salva o PDF com o nome do prontuário
-        doc.save(`${formulario.nome}.pdf`);
+          doc.setFontSize(14);
+          doc.setFont('Nunito', 'normal');
+          const sugestaoText = doc.splitTextToSize(infoIngresso.sugestaoLLM, 190);
+          doc.text(sugestaoText, 10, 140);
+        }
+  
+        // Salva o PDF com um nome baseado no titular do ingresso
+        doc.save(`Ingresso_${infoIngresso.dadosPessoais.nomeTitular}.pdf`);
       },
       error: (error) => {
-        console.error('Erro ao buscar o prontuário:', error);
+        console.error('Erro ao buscar o ingresso:', error);
         alert('Não foi possível gerar o PDF.');
       },
       complete: () => {
@@ -364,8 +300,8 @@ export class FormularioViewComponent {
       },
     });
   }
+  
   // -------------------- Funcoes e atributos para o estado de edicao --------------------
-
   novaSecaoTitulo: string = ''; // para armazenar o título da nova seção temporariamente
 
   async adicionarSecao(): Promise<void> {

@@ -13,6 +13,28 @@ export interface Formulario {
     instanciasFormularioIds: number[];
     formularioPaiId: number;
 }
+export interface DadosPessoaisIngresso {
+    // String dataCompra,
+    // String sobreEvento,
+    // Boolean ehMeiaEntrada,
+    // DadosPessoaisIngresso dadosPessoais,
+    // String sugestaoLLM   
+    nomeTitular: string;
+    cpfTitular: string;
+    idadeTitular: string;
+}
+export interface InfoIngresso {
+    // String dataCompra,
+    // String sobreEvento,
+    // Boolean ehMeiaEntrada,
+    // DadosPessoaisIngresso dadosPessoais,
+    // String sugestaoLLM   
+    dataCompra: string;
+    sobreEvento: string;
+    ehMeiaEntrada: boolean;
+    dadosPessoais: DadosPessoaisIngresso;
+    sugestaoLLM: string;
+}
 
 export class FormularioData implements Formulario {
     id: number;

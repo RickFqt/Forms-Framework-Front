@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Formulario, FormularioComplete } from './formulario';
+import { Formulario, FormularioComplete, InfoIngresso } from './formulario';
 import { Observable, catchError, throwError } from 'rxjs';
 import { Secao, SecaoCreate } from './secao';
 import { Resposta, RespostaCreate } from './resposta';
@@ -87,8 +87,8 @@ export class FormularioService {
     );
   }
 
-  getInformacoesArquivo(idFormulario: number): Observable<FormularioComplete> {
-    return this.http.get<FormularioComplete>(`/api/formulario/${idFormulario}/informacoesArquivo`);
+  getInformacoesArquivo(idFormulario: number): Observable<InfoIngresso> {
+    return this.http.get<InfoIngresso>(`/api/formulario/${idFormulario}/informacoesArquivo`);
   }
   
   finalizarRespostas(idFormulario: number): Observable<Formulario> {
